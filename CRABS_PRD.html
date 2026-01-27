@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CRABS Construction ERP System - PRD</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2cm;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+            max-width: none;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #1e40af;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            page-break-before: always;
+        }
+        h1:first-child {
+            margin-top: 0;
+            page-break-before: auto;
+        }
+        h2 {
+            color: #1e40af;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 8px;
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #374151;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h4 {
+            color: #4b5563;
+            margin-top: 25px;
+            margin-bottom: 12px;
+        }
+        p {
+            margin: 12px 0;
+            text-align: justify;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        code {
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #e11d48;
+        }
+        pre {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        pre code {
+            background: none;
+            padding: 0;
+            color: #1f2937;
+        }
+        strong {
+            color: #1f2937;
+            font-weight: 600;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 0;
+            border-bottom: 4px solid #3b82f6;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            color: #1e40af;
+            border: none;
+            page-break-before: auto;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            color: #6b7280;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #e5e7eb;
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.9em;
+        }
+        @media print {
+            body { margin: 0; }
+            .container { padding: 0; }
+            h1 { page-break-before: always; }
+            h1:first-child { page-break-before: auto; }
+            .no-print { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CRABS Construction ERP System</h1>
+            <p>Product Requirements Document (PRD)</p>
+            <p style="font-size: 1em; margin-top: 15px;">Version 1.0 • November 14, 2024</p>
+        </div>
+        <h1>CRABS Construction ERP System</h1>
+<h2>Product Requirements Document (PRD)</h2>
+
+<strong>Version:</strong> 1.0  
+<strong>Date:</strong> November 14, 2024  
+<strong>Document Type:</strong> Product Requirements Document
+
+<p>---</p>
+
+<h2>Table of Contents</h2>
+
+<p>1. [Executive Summary](#executive-summary)
+2. [System Overview](#system-overview)
+3. [Technical Architecture](#technical-architecture)
+4. [Core Features](#core-features)
+5. [User Interface &amp; Navigation](#user-interface--navigation)
+6. [Data Models](#data-models)
+7. [Feature Specifications](#feature-specifications)
+8. [Business Logic](#business-logic)
+9. [Integration &amp; Export Features](#integration--export-features)
+10. [Security &amp; Data Management](#security--data-management)</p>
+
+<p>---</p>
+
+<h2>Executive Summary</h2>
+
+<p>CRABS (Construction Resource &amp; Billing System) is a comprehensive Enterprise Resource Planning (ERP) system specifically designed for construction companies to manage projects, orders, items, measurements, and billing processes. The system provides end-to-end project lifecycle management with sophisticated measurement tracking and milestone-based billing capabilities.</p>
+
+<h3>Key Value Propositions</h3>
+<ul>
+<li><strong>Hierarchical Project Management</strong>: Structured project → order → item → measurement workflow</li>
+<li><strong>Milestone-Based Billing</strong>: Flexible billing breakup with percentage-based milestones</li>
+<li><strong>Shared Measurement Sheets</strong>: Department-wise collaborative measurement tracking</li>
+<li><strong>Automated Bill Generation</strong>: RA (Running Account) bill creation with locked measurement data</li>
+<li><strong>Professional PDF Export</strong>: High-quality PDF generation for bills and abstract sheets</li>
+<li><strong>Real-time Calculations</strong>: Dynamic financial and progress tracking</li>
+</ul>
+
+<p>---</p>
+
+<h2>System Overview</h2>
+
+<p>CRABS is a web-based application built using modern React technologies, designed to streamline construction project management from initial project setup through final billing and documentation.</p>
+
+<h3>Primary Users</h3>
+<ul>
+<li><strong>Project Managers</strong>: Overall project oversight and management</li>
+<li><strong>Site Engineers</strong>: Measurement data entry and progress tracking</li>
+<li><strong>Billing Teams</strong>: Invoice generation and financial tracking</li>
+<li><strong>Department Heads</strong>: Department-specific progress monitoring</li>
+</ul>
+
+<h3>Core Workflow</h3>
+1. <strong>Project Creation</strong>: Establish new construction projects with client information
+2. <strong>Order Management</strong>: Create and manage work orders within projects
+3. <strong>Item Definition</strong>: Define billable items with department categorization and billing breakup
+4. <strong>Measurement Tracking</strong>: Record detailed measurements with milestone completion
+5. <strong>Bill Generation</strong>: Create RA bills based on completed milestones
+6. <strong>Documentation</strong>: Generate professional PDF reports and bills
+
+<p>---</p>
+
+<h2>Technical Architecture</h2>
+
+<h3>Frontend Stack</h3>
+<ul>
+<li><strong>Framework</strong>: React 18 with TypeScript</li>
+<li><strong>Build Tool</strong>: Vite for fast development and optimized builds</li>
+<li><strong>Styling</strong>: Tailwind CSS with shadcn/ui component library</li>
+<li><strong>Routing</strong>: React Router v6 with nested routing structure</li>
+<li><strong>State Management</strong>: React hooks with local component state</li>
+<li><strong>Icons</strong>: Lucide React icon library</li>
+</ul>
+
+<h3>Data Storage</h3>
+<ul>
+<li><strong>Primary Storage</strong>: Browser localStorage for client-side data persistence</li>
+<li><strong>Data Structure</strong>: Normalized relational data models with foreign key relationships</li>
+<li><strong>Sample Data</strong>: Built-in sample data initialization for demonstration</li>
+</ul>
+
+<h3>Key Libraries &amp; Dependencies</h3>
+<ul>
+<li><strong>PDF Generation</strong>: jsPDF + html2canvas for high-quality PDF export</li>
+<li><strong>Form Handling</strong>: React Hook Form with validation</li>
+<li><strong>UI Components</strong>: shadcn/ui component system</li>
+<li><strong>Date Handling</strong>: Native JavaScript Date objects</li>
+<li><strong>Notifications</strong>: Toast notifications for user feedback</li>
+</ul>
+
+<p>---</p>
+
+<h2>Core Features</h2>
+
+<h3>1. Project Management Dashboard</h3>
+<strong>Purpose</strong>: Central hub for managing all construction projects
+
+<strong>Key Capabilities</strong>:
+<ul>
+<li>Create, edit, and delete projects</li>
+<li>View project statistics (total budget, order count)</li>
+<li>Client information management</li>
+<li>Project-level financial summaries</li>
+<li>Quick navigation to project orders</li>
+</ul>
+
+<strong>Business Value</strong>: Provides executive-level overview of all active projects with key financial metrics
+
+<h3>2. Order Management System</h3>
+<strong>Purpose</strong>: Manage work orders within specific projects
+
+<strong>Key Capabilities</strong>:
+<ul>
+<li>Create orders with unique order codes and descriptions</li>
+<li>Link orders to parent projects</li>
+<li>Track order-level financial totals</li>
+<li>Manage order lifecycle from creation to completion</li>
+<li>Navigate to order items for detailed management</li>
+</ul>
+
+<strong>Business Value</strong>: Enables structured breakdown of project work into manageable orders
+
+<h3>3. Item &amp; Billing Management</h3>
+<strong>Purpose</strong>: Define billable items with sophisticated billing structures
+
+<strong>Key Capabilities</strong>:
+<ul>
+<li>Create items with detailed specifications (code, description, unit, quantity, rate)</li>
+<li>Department-based categorization</li>
+<li>Flexible billing breakup with multiple milestones</li>
+<li>Percentage-based milestone definitions</li>
+<li>Real-time amount calculations</li>
+<li>Department filtering and sorting</li>
+</ul>
+
+<strong>Business Value</strong>: Supports complex billing structures common in construction projects
+
+<h3>4. Measurement Sheet System</h3>
+<strong>Purpose</strong>: Detailed measurement tracking with milestone completion
+
+<strong>Key Capabilities</strong>:
+<ul>
+<li>Shared measurement sheets across department items</li>
+<li>Row-based measurement entry (mark, dimensions, quantities)</li>
+<li>Milestone completion tracking with partial completion support</li>
+<li>Real-time weight and quantity calculations</li>
+<li>Measurement validation and error checking</li>
+<li>Progress visualization</li>
+</ul>
+
+<strong>Business Value</strong>: Ensures accurate measurement tracking and progress monitoring
+
+<h3>5. RA Bill Generation</h3>
+<strong>Purpose</strong>: Automated bill creation based on completed measurements
+
+<strong>Key Capabilities</strong>:
+<ul>
+<li>Generate RA (Running Account) bills from locked measurement data</li>
+<li>Milestone-based billing with completed quantities</li>
+<li>Bill numbering and tracking</li>
+<li>Historical bill management</li>
+<li>PDF export for professional documentation</li>
+</ul>
+
+<strong>Business Value</strong>: Streamlines billing process and ensures accuracy
+
+<h3>6. Bill History &amp; Documentation</h3>
+<strong>Purpose</strong>: Comprehensive bill tracking and document management
+
+<strong>Key Capabilities</strong>:
+<ul>
+<li>View all generated RA bills</li>
+<li>Bill details with project and order context</li>
+<li>PDF generation and download</li>
+<li>Bill status tracking</li>
+<li>Historical data preservation</li>
+</ul>
+
+<strong>Business Value</strong>: Maintains complete audit trail of all billing activities
+
+<p>---</p>
+
+<h2>User Interface &amp; Navigation</h2>
+
+<h3>Navigation Structure</h3>
+<pre><code>/ (Projects Dashboard)
+├── /projects/:projectId/orders (Order Management)
+│   └── /projects/:projectId/orders/:orderId/items (Item Management)
+│       └── /projects/:projectId/orders/:orderId/items/:itemId/measurement (Measurement Sheet)
+└── /bill-history (Bill History &amp; Documentation)</code></pre>
+
+<h3>Design Principles</h3>
+<ul>
+<li><strong>Responsive Design</strong>: Mobile-first approach with desktop optimization</li>
+<li><strong>Consistent UI</strong>: shadcn/ui component system for unified experience</li>
+<li><strong>Intuitive Navigation</strong>: Breadcrumb navigation and clear hierarchy</li>
+<li><strong>Action-Oriented</strong>: Prominent action buttons for key workflows</li>
+<li><strong>Data Visualization</strong>: Cards, tables, and statistics for data presentation</li>
+</ul>
+
+<h3>Key UI Components</h3>
+<ul>
+<li><strong>Dashboard Cards</strong>: Project, order, and item summary cards</li>
+<li><strong>Data Tables</strong>: Sortable, filterable tables for list views</li>
+<li><strong>Modal Dialogs</strong>: Create/edit forms in overlay dialogs</li>
+<li><strong>Confirmation Dialogs</strong>: Safety confirmations for destructive actions</li>
+<li><strong>Toast Notifications</strong>: Real-time feedback for user actions</li>
+</ul>
+
+<p>---</p>
+
+<h2>Data Models</h2>
+
+<h3>Project Model</h3>
+<pre><code>interface Project {
+  id: string;
+  name: string;
+  clientName: string;
+  createdAt: string;
+  updatedAt: string;
+}</code></pre>
+
+<h3>Order Model</h3>
+<pre><code>interface Order {
+  id: string;
+  projectId: string;
+  orderNumber: string;
+  orderCode?: string;
+  title: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+}</code></pre>
+
+<h3>Item Model</h3>
+<pre><code>interface Item {
+  id: string;
+  orderId: string;
+  itemCode?: string;
+  description: string;
+  unitOfMeasurement: string;
+  quantity: number;
+  unitRate: number;
+  amount: number;
+  department: string;
+  billingBreakup: BillingBreakup[];
+  createdAt: string;
+  updatedAt: string;
+}</code></pre>
+
+<h3>Measurement Row Model</h3>
+<pre><code>interface MeasurementRow {
+  id: string;
+  itemId: string;
+  check: boolean;
+  type: string;
+  mark: string;
+  unit: number;
+  length: number;
+  width?: number | null;
+  thickness?: number | null;
+  qty: number;
+  totalWeight: number;
+  breakupStatus: Record&lt;string, MilestoneStatus&gt;;
+  createdAt: string;
+  updatedAt: string;
+  department: string;
+}</code></pre>
+
+<h3>RA Bill Model</h3>
+<pre><code>interface RABill {
+  id: string;
+  orderId: string;
+  raNumber: string;
+  createdAt: string;
+  updatedAt: string;
+  lockedData: LockedMeasurementData[];
+}</code></pre>
+
+<p>---</p>
+
+<h2>Feature Specifications</h2>
+
+<h3>Project Management Features</h3>
+
+<h4>Project Creation &amp; Management</h4>
+<ul>
+<li><strong>Create Project</strong>: Form-based project creation with name and client validation</li>
+<li><strong>Edit Project</strong>: In-place editing of project details</li>
+<li><strong>Delete Project</strong>: Cascading deletion with confirmation (removes all orders, items, measurements)</li>
+<li><strong>Project Statistics</strong>: Real-time calculation of total budget and order count</li>
+<li><strong>Project Navigation</strong>: Direct links to project orders and management</li>
+</ul>
+
+<h4>Project Dashboard</h4>
+<ul>
+<li><strong>Project Cards</strong>: Visual cards showing key project information</li>
+<li><strong>Financial Summary</strong>: Total budget calculations across all project items</li>
+<li><strong>Order Count</strong>: Number of orders per project</li>
+<li><strong>Creation Date</strong>: Project timeline information</li>
+<li><strong>Quick Actions</strong>: Edit, delete, and view project actions</li>
+</ul>
+
+<h3>Order Management Features</h3>
+
+<h4>Order Lifecycle Management</h4>
+<ul>
+<li><strong>Order Creation</strong>: Form-based order creation with project linking</li>
+<li><strong>Order Editing</strong>: Modify order details and descriptions</li>
+<li><strong>Order Deletion</strong>: Safe deletion with item cascade confirmation</li>
+<li><strong>Order Statistics</strong>: Item count and total amount calculations</li>
+<li><strong>Order Navigation</strong>: Links to order items and measurement sheets</li>
+</ul>
+
+<h4>Order Organization</h4>
+<ul>
+<li><strong>Order Numbering</strong>: Automatic order number generation</li>
+<li><strong>Order Codes</strong>: Optional custom order codes</li>
+<li><strong>Descriptions</strong>: Detailed order descriptions and notes</li>
+<li><strong>Project Context</strong>: Clear project association and navigation</li>
+</ul>
+
+<h3>Item Management Features</h3>
+
+<h4>Item Definition &amp; Configuration</h4>
+<ul>
+<li><strong>Item Creation</strong>: Comprehensive item setup with all required fields</li>
+<li><strong>Item Editing</strong>: Modify item specifications and billing structure</li>
+<li><strong>Item Deletion</strong>: Safe deletion with measurement data cascade</li>
+<li><strong>Unit Management</strong>: Support for multiple units (MT, KG, PCS, SQM, etc.)</li>
+<li><strong>Department Assignment</strong>: Department-based item categorization</li>
+</ul>
+
+<h4>Billing Breakup System</h4>
+<ul>
+<li><strong>Milestone Definition</strong>: Create multiple billing milestones per item</li>
+<li><strong>Percentage Allocation</strong>: Flexible percentage-based milestone distribution</li>
+<li><strong>Milestone Naming</strong>: Custom milestone names (e.g., &quot;Advance Payment&quot;, &quot;Against Structure&quot;)</li>
+<li><strong>Validation</strong>: Ensure milestone percentages total 100%</li>
+<li><strong>Dynamic Calculation</strong>: Real-time amount calculations based on milestones</li>
+</ul>
+
+<h4>Item Management Interface</h4>
+<ul>
+<li><strong>Filtering</strong>: Department-based filtering with &quot;All Departments&quot; option</li>
+<li><strong>Sorting</strong>: Multi-column sorting (description, department, amount, etc.)</li>
+<li><strong>Search</strong>: Quick item lookup and filtering</li>
+<li><strong>Bulk Operations</strong>: Mass item management capabilities</li>
+</ul>
+
+<h3>Measurement Sheet Features</h3>
+
+<h4>Measurement Data Entry</h4>
+<ul>
+<li><strong>Row-Based Entry</strong>: Individual measurement rows with complete specifications</li>
+<li><strong>Dimension Tracking</strong>: Length, width, thickness measurements</li>
+<li><strong>Quantity Management</strong>: Unit quantities and total weight calculations</li>
+<li><strong>Mark System</strong>: Identification marks for measurement tracking</li>
+<li><strong>Type Classification</strong>: Measurement type categorization</li>
+</ul>
+
+<h4>Shared Measurement Sheets</h4>
+<ul>
+<li><strong>Department Sharing</strong>: Single measurement sheet per department across all items</li>
+<li><strong>Cross-Item Visibility</strong>: View measurements for all department items</li>
+<li><strong>Collaborative Entry</strong>: Multiple users can contribute to same measurement sheet</li>
+<li><strong>Data Consistency</strong>: Shared data model ensures consistency across items</li>
+</ul>
+
+<h4>Milestone Completion Tracking</h4>
+<ul>
+<li><strong>Milestone Status</strong>: Track completion status for each billing milestone</li>
+<li><strong>Partial Completion</strong>: Support for partial milestone completion with quantities</li>
+<li><strong>Progress Visualization</strong>: Visual indicators for milestone progress</li>
+<li><strong>Date Tracking</strong>: Completion date recording for audit trails</li>
+<li><strong>Lock Mechanism</strong>: Prevent modification of completed milestones</li>
+</ul>
+
+<h4>Measurement Calculations</h4>
+<ul>
+<li><strong>Weight Calculations</strong>: Automatic total weight computation</li>
+<li><strong>Quantity Summation</strong>: Real-time quantity totals</li>
+<li><strong>Milestone Totals</strong>: Column-wise milestone completion totals</li>
+<li><strong>Progress Percentages</strong>: Completion percentage calculations</li>
+<li><strong>Validation</strong>: Data validation and error checking</li>
+</ul>
+
+<h3>RA Bill Generation Features</h3>
+
+<h4>Bill Creation Process</h4>
+<ul>
+<li><strong>Milestone-Based Generation</strong>: Create bills based on completed milestones</li>
+<li><strong>Data Locking</strong>: Lock measurement data to prevent post-bill modifications</li>
+<li><strong>RA Numbering</strong>: Automatic RA bill number generation</li>
+<li><strong>Multi-Item Support</strong>: Include multiple items in single RA bill</li>
+<li><strong>Department Filtering</strong>: Generate bills for specific departments</li>
+</ul>
+
+<h4>Bill Content &amp; Structure</h4>
+<ul>
+<li><strong>Abstract Sheet</strong>: Professional bill format with project details</li>
+<li><strong>Measurement Summary</strong>: Detailed measurement breakdown</li>
+<li><strong>Milestone Breakdown</strong>: Clear milestone completion status</li>
+<li><strong>Financial Calculations</strong>: Accurate amount calculations</li>
+<li><strong>Project Context</strong>: Complete project and order information</li>
+</ul>
+
+<h4>Bill Management</h4>
+<ul>
+<li><strong>Bill History</strong>: Complete history of all generated bills</li>
+<li><strong>Bill Viewing</strong>: Detailed bill preview and review</li>
+<li><strong>PDF Export</strong>: High-quality PDF generation for printing/sharing</li>
+<li><strong>Bill Status</strong>: Track bill status and completion</li>
+<li><strong>Audit Trail</strong>: Complete audit trail of bill generation</li>
+</ul>
+
+<h3>PDF Generation Features</h3>
+
+<h4>Professional PDF Output</h4>
+<ul>
+<li><strong>High-Quality Rendering</strong>: 2x scale rendering for crisp output</li>
+<li><strong>Landscape Orientation</strong>: Optimized for wide construction tables</li>
+<li><strong>Table Optimization</strong>: Proper handling of wide measurement tables</li>
+<li><strong>Font Loading</strong>: Ensure proper font rendering in PDFs</li>
+<li><strong>Image Support</strong>: Include logos and images in PDF output</li>
+</ul>
+
+<h4>PDF Customization</h4>
+<ul>
+<li><strong>Custom Filenames</strong>: Descriptive filename generation with project/date info</li>
+<li><strong>Multiple Formats</strong>: Support for different PDF layouts</li>
+<li><strong>Print Optimization</strong>: Optimized for both screen and print viewing</li>
+<li><strong>Loading Indicators</strong>: User feedback during PDF generation</li>
+<li><strong>Error Handling</strong>: Graceful error handling with user notifications</li>
+</ul>
+
+<p>---</p>
+
+<h2>Business Logic</h2>
+
+<h3>Financial Calculations</h3>
+<ul>
+<li><strong>Item Amounts</strong>: quantity × unitRate = amount</li>
+<li><strong>Milestone Amounts</strong>: itemAmount × milestonePercentage / 100</li>
+<li><strong>Project Totals</strong>: Sum of all item amounts within project</li>
+<li><strong>Order Totals</strong>: Sum of all item amounts within order</li>
+<li><strong>Completion Values</strong>: completedQuantity × unitRate × milestonePercentage / 100</li>
+</ul>
+
+<h3>Measurement Calculations</h3>
+<ul>
+<li><strong>Total Weight</strong>: unit × length × width × thickness × qty (where applicable)</li>
+<li><strong>Milestone Quantities</strong>: Partial or complete quantities per milestone</li>
+<li><strong>Progress Percentages</strong>: completedWeight / totalWeight × 100</li>
+<li><strong>Column Totals</strong>: Sum of completed quantities per milestone column</li>
+</ul>
+
+<h3>Data Validation Rules</h3>
+<ul>
+<li><strong>Project Names</strong>: Required, non-empty strings</li>
+<li><strong>Client Names</strong>: Required, non-empty strings</li>
+<li><strong>Item Quantities</strong>: Positive numbers only</li>
+<li><strong>Unit Rates</strong>: Positive numbers only</li>
+<li><strong>Milestone Percentages</strong>: Must total exactly 100%</li>
+<li><strong>Measurement Dimensions</strong>: Positive numbers where applicable</li>
+</ul>
+
+<h3>Business Rules</h3>
+<ul>
+<li><strong>Cascading Deletes</strong>: Deleting projects removes all child orders, items, and measurements</li>
+<li><strong>Department Consistency</strong>: Items in same department share measurement sheets</li>
+<li><strong>Milestone Locking</strong>: Completed milestones cannot be modified after RA bill generation</li>
+<li><strong>Data Integrity</strong>: Foreign key relationships maintained across all entities</li>
+</ul>
+
+<p>---</p>
+
+<h2>Integration &amp; Export Features</h2>
+
+<h3>PDF Export System</h3>
+<ul>
+<li><strong>Bill PDFs</strong>: Professional RA bill documents</li>
+<li><strong>Abstract Sheet PDFs</strong>: Detailed project abstract sheets</li>
+<li><strong>Measurement Summary PDFs</strong>: Comprehensive measurement reports</li>
+<li><strong>Custom Formatting</strong>: Construction industry standard formatting</li>
+</ul>
+
+<h3>Data Export Capabilities</h3>
+<ul>
+<li><strong>Local Storage</strong>: All data persisted in browser localStorage</li>
+<li><strong>JSON Export</strong>: Structured data export for backup/migration</li>
+<li><strong>PDF Reports</strong>: Professional document generation</li>
+<li><strong>Print Support</strong>: Optimized printing layouts</li>
+</ul>
+
+<h3>Sample Data System</h3>
+<ul>
+<li><strong>Demo Data</strong>: Built-in sample projects, orders, and items</li>
+<li><strong>Data Initialization</strong>: Automatic sample data setup for new users</li>
+<li><strong>Reset Capability</strong>: Ability to reset to sample data state</li>
+<li><strong>Learning Aid</strong>: Helps users understand system capabilities</li>
+</ul>
+
+<p>---</p>
+
+<h2>Security &amp; Data Management</h2>
+
+<h3>Data Security</h3>
+<ul>
+<li><strong>Client-Side Storage</strong>: All data stored locally in browser</li>
+<li><strong>No Server Dependencies</strong>: Eliminates server-side security concerns</li>
+<li><strong>Data Isolation</strong>: Each browser instance maintains separate data</li>
+<li><strong>Privacy Protection</strong>: No data transmission to external servers</li>
+</ul>
+
+<h3>Data Persistence</h3>
+<ul>
+<li><strong>localStorage</strong>: Reliable browser-based data storage</li>
+<li><strong>Structured Storage</strong>: Organized data models with relationships</li>
+<li><strong>Data Integrity</strong>: Validation and consistency checks</li>
+<li><strong>Backup Considerations</strong>: Users responsible for data backup</li>
+</ul>
+
+<h3>Error Handling</h3>
+<ul>
+<li><strong>Validation Errors</strong>: Clear user feedback for invalid inputs</li>
+<li><strong>System Errors</strong>: Graceful error handling with user notifications</li>
+<li><strong>Data Recovery</strong>: Robust error recovery mechanisms</li>
+<li><strong>User Guidance</strong>: Helpful error messages and guidance</li>
+</ul>
+
+<p>---</p>
+
+<h2>Conclusion</h2>
+
+<p>CRABS Construction ERP System provides a comprehensive solution for construction project management, offering sophisticated measurement tracking, milestone-based billing, and professional documentation capabilities. The system&#x27;s hierarchical structure, combined with shared measurement sheets and automated bill generation, makes it an ideal solution for construction companies seeking to streamline their project management and billing processes.</p>
+
+<p>The modern React-based architecture ensures a responsive, user-friendly experience while the local storage approach provides simplicity and data privacy. With features like PDF generation, milestone tracking, and department-based organization, CRABS addresses the specific needs of the construction industry while maintaining flexibility for various project types and organizational structures.</p>
+
+<p>---</p>
+
+<strong>Document End</strong>
+        <div class="footer">
+            <p>Generated on November 14, 2025 at 07:55 PM</p>
+            <p>CRABS Construction ERP System - Product Requirements Document</p>
+        </div>
+    </div>
+</body>
+</html>
