@@ -103,9 +103,31 @@ export default function Dashboard() {
       allMeasurements.forEach((row) => {
         const rate = itemRates.get(row.itemId) || 0;
         // Sum up completed quantities from breakup status
-        Object.values(row.breakupStatus).forEach((status) => {
-          if (status.done && status.completedQty) {
-            totalWorkDoneValue += status.completedQty * rate;
+        Object.entries(row.breakupStatus || {}).forEach(([key, status]) => {
+          // Only include quantities that are NOT locked in any RA (Unbilled Amount)
+          if (!status.lockedInRA) {
+            // Extract percentage from key (format: itemId-percentage-name or percentage%-name)
+            let percentage = 100;
+            if (key.startsWith(`${row.itemId}-`)) {
+              const parts = key.substring(row.itemId.length + 1).split("-");
+              percentage = parseFloat(parts[0]) || 100;
+            } else if (key.includes("%")) {
+              percentage = parseFloat(key.split("%")[0]) || 100;
+            } else {
+              percentage = parseFloat(key.split("-")[0]) || 100;
+            }
+
+            // Use completedWeight if available, otherwise completedQty
+            // Also remove strict 'done' check as we want to show value of any work recorded
+            // This matches Abstract Sheet logic but weighted by percentage
+            if (status.completedWeight && status.completedWeight > 0) {
+              totalWorkDoneValue +=
+                status.completedWeight * rate * (percentage / 100);
+            } else if (status.completedQty && status.completedQty > 0) {
+              // Fallback to qty if weight not available
+              totalWorkDoneValue +=
+                status.completedQty * rate * (percentage / 100);
+            }
           }
         });
       });
@@ -155,29 +177,57 @@ export default function Dashboard() {
       const projectsWithProgress: ProjectWithProgress[] = allProjects.map(
         (project) => {
           const projectOrders = allOrders.filter(
-            (order) => order.projectId === project.id
+            (order) => order.projectId === project.id,
           );
           const projectItems = allItems.filter((item) =>
-            projectOrders.some((order) => order.id === item.orderId)
+            projectOrders.some((order) => order.id === item.orderId),
           );
 
           const totalBudget = projectItems.reduce(
             (sum, item) => sum + item.amount,
-            0
+            0,
           );
 
           // Calculate progress based on value of work done vs total budget
           let projectWorkDoneValue = 0;
           projectItems.forEach((item) => {
             const itemMeasurements = allMeasurements.filter(
-              (m) => m.itemId === item.id
+              (m) => m.itemId === item.id,
             );
             itemMeasurements.forEach((row) => {
-              Object.values(row.breakupStatus).forEach((status) => {
-                if (status.done && status.completedQty) {
-                  projectWorkDoneValue += status.completedQty * item.unitRate;
-                }
-              });
+              Object.entries(row.breakupStatus || {}).forEach(
+                ([key, status]) => {
+                  // Determine executed quantity/weight to use for value calculation
+                  // Matches Abstract Sheet logic: use weight if available
+                  // Only include unlocked (unbilled) work
+                  if (!status.lockedInRA) {
+                    // Extract percentage from key
+                    let percentage = 100;
+                    if (key.startsWith(`${row.itemId}-`)) {
+                      const parts = key
+                        .substring(row.itemId.length + 1)
+                        .split("-");
+                      percentage = parseFloat(parts[0]) || 100;
+                    } else if (key.includes("%")) {
+                      percentage = parseFloat(key.split("%")[0]) || 100;
+                    } else {
+                      percentage = parseFloat(key.split("-")[0]) || 100;
+                    }
+
+                    if (status.completedWeight && status.completedWeight > 0) {
+                      projectWorkDoneValue +=
+                        status.completedWeight *
+                        item.unitRate *
+                        (percentage / 100);
+                    } else if (status.completedQty && status.completedQty > 0) {
+                      projectWorkDoneValue +=
+                        status.completedQty *
+                        item.unitRate *
+                        (percentage / 100);
+                    }
+                  }
+                },
+              );
             });
           });
 
@@ -201,13 +251,13 @@ export default function Dashboard() {
             dueDate: "2024-12-31", // Still hardcoded as it's not in the data model
             searchTerms, // Add hidden field for searching
           };
-        }
+        },
       );
 
       // Sort by creation date descending
       projectsWithProgress.sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
 
       setProjects(projectsWithProgress);
