@@ -853,8 +853,10 @@ export default function MeasurementSheet() {
       setDepartmentItems(sameDepartmentItems);
 
       // Load measurements for the current item
-      const measurements = await measurementStorage.getByItemId(
-        itemId,
+      // Load measurements for all items in the department
+      const departmentItemIds = sameDepartmentItems.map((i) => i.id);
+      const measurements = await measurementStorage.getByItemIds(
+        departmentItemIds,
         currentUser.id,
       );
       // Sanitize measurements to ensure breakupStatus exists

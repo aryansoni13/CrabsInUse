@@ -309,6 +309,33 @@ export const measurementStorage = {
     return (data || []).map(toCamelCase) as MeasurementRow[];
   },
 
+  getByItemIds: async (
+    itemIds: string[],
+    userId: string,
+  ): Promise<MeasurementRow[]> => {
+    if (itemIds.length === 0) return [];
+
+    // Split into chunks of 100 to avoid query limits
+    const chunks = [];
+    for (let i = 0; i < itemIds.length; i += 100) {
+      chunks.push(itemIds.slice(i, i + 100));
+    }
+
+    const allData = [];
+    for (const chunk of chunks) {
+      const { data, error } = await supabase
+        .from("measurement_rows")
+        .select("*")
+        .in("item_id", chunk)
+        .eq("user_id", userId);
+
+      if (error) throw error;
+      if (data) allData.push(...data);
+    }
+
+    return allData.map(toCamelCase) as MeasurementRow[];
+  },
+
   create: async (
     row: Omit<MeasurementRow, "id" | "createdAt" | "updatedAt">,
   ): Promise<MeasurementRow> => {
