@@ -7,6 +7,7 @@ import {
   Building2,
   Hash,
   Filter,
+  FileSpreadsheet,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ import {
 import { RABill, Project, Order, Item, MeasurementRow } from "@/types";
 import { BillDisplay } from "@/components/ui/bill-display";
 import { generateSegmentedMultiPageBillPDF } from "@/lib/pdf-generator";
+import { generateBillExcel } from "@/lib/excel-generator";
 
 export default function BillHistory() {
   const [allRABills, setAllRABills] = useState<RABill[]>([]);
@@ -129,6 +131,23 @@ export default function BillHistory() {
     }
   };
 
+  const handleExportExcel = () => {
+    if (!selectedBill || !billData) return;
+
+    try {
+      generateBillExcel({
+        project: billData.project,
+        order: billData.order,
+        items: billData.items,
+        measurementRows: billData.measurementRows,
+        raBill: selectedBill,
+      });
+    } catch (error) {
+      console.error("Excel generation failed:", error);
+      alert("Excel generation failed. Please try again.");
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-IN", {
       year: "numeric",
@@ -200,10 +219,16 @@ export default function BillHistory() {
                 </p>
               </div>
             </div>
-            <Button onClick={handlePrint} variant="outline">
-              <Download className="mr-2 h-4 w-4" />
-              Print / Save PDF
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button onClick={handleExportExcel} variant="outline">
+                <FileSpreadsheet className="mr-2 h-4 w-4" />
+                Export Excel
+              </Button>
+              <Button onClick={handlePrint} variant="outline">
+                <Download className="mr-2 h-4 w-4" />
+                Print / Save PDF
+              </Button>
+            </div>
           </div>
 
           {/* Bill Display */}
