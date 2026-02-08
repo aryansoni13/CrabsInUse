@@ -50,6 +50,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { useToast } from "@/hooks/use-toast";
 import {
   projectStorage,
@@ -614,6 +615,7 @@ export default function MeasurementSheet() {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedArea, setSelectedArea] = useState<string>("all");
+  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
   const tableRef = useRef<HTMLTableElement>(null);
   const { toast } = useToast();
 
@@ -2379,6 +2381,114 @@ export default function MeasurementSheet() {
     "all",
     ...Array.from(new Set(measurementRows.map((row) => getRowArea(row)))),
   ];
+  // Helper function to update column filter
+  const handleColumnFilterChange = (columnKey: string, value: string) => {
+    setColumnFilters((prev) => ({
+      ...prev,
+      [columnKey]: value,
+    }));
+  };
+
+  // Helper function to check if a row matches column filters
+  const matchesColumnFilters = (row: MeasurementRow): boolean => {
+    for (const [columnKey, filterValue] of Object.entries(columnFilters)) {
+      if (!filterValue.trim()) continue;
+      
+      const query = filterValue.toLowerCase();
+      let fieldValue = "";
+      
+      // Map column keys to row fields
+      switch (columnKey) {
+        case "location":
+          fieldValue = String(row.customFields?.["location"] || row.type || "");
+          break;
+        case "drawingNo":
+          fieldValue = String(row.customFields?.["drawingNo"] || row.mark || "");
+          break;
+        case "sheetNo":
+          fieldValue = String(row.customFields?.["sheetNo"] || "");
+          break;
+        case "moc":
+          fieldValue = String(row.customFields?.["moc"] || "");
+          break;
+        case "lineSize":
+          fieldValue = String(row.customFields?.["lineSize"] || "");
+          break;
+        case "pipeOD":
+          fieldValue = String(row.customFields?.["pipeOD"] || "");
+          break;
+        case "insulationThickness":
+          fieldValue = String(row.customFields?.["insulationThickness"] || "");
+          break;
+        case "insulationType":
+          fieldValue = String(row.customFields?.["insulationType"] || "");
+          break;
+        case "temp":
+          fieldValue = String(row.customFields?.["temp"] || "");
+          break;
+        case "pipeLength":
+          fieldValue = String(row.length || "");
+          break;
+        case "area":
+          fieldValue = String(row.area || "");
+          break;
+        case "type":
+          fieldValue = String(row.type || "");
+          break;
+        case "mark":
+          fieldValue = String(row.mark || "");
+          break;
+        case "docNo":
+          fieldValue = String(row.customFields?.["docNo"] || "");
+          break;
+        case "lineNo":
+          fieldValue = String(row.customFields?.["lineNo"] || "");
+          break;
+        case "rev":
+          fieldValue = String(row.customFields?.["rev"] || "");
+          break;
+        case "fjSj":
+          fieldValue = String(row.customFields?.["fjSj"] || "");
+          break;
+        case "jointNo":
+          fieldValue = String(row.customFields?.["jointNo"] || "");
+          break;
+        case "spoolNo":
+          fieldValue = String(row.customFields?.["spoolNo"] || "");
+          break;
+        case "equipmentNo":
+          fieldValue = String(row.customFields?.["equipmentNo"] || row.type || "");
+          break;
+        case "equipmentName":
+          fieldValue = String(row.customFields?.["equipmentName"] || row.mark || "");
+          break;
+        case "portion":
+          fieldValue = String(row.customFields?.["portion"] || "");
+          break;
+        case "position":
+          fieldValue = String(row.customFields?.["position"] || "");
+          break;
+        case "baseMaterial":
+          fieldValue = String(row.customFields?.["baseMaterial"] || "");
+          break;
+        case "paintSystem":
+          fieldValue = String(row.customFields?.["paintSystem"] || "");
+          break;
+        case "remarks":
+          fieldValue = String(row.customFields?.["remarks"] || "");
+          break;
+        default:
+          // Check customFields for any other column
+          fieldValue = String(row.customFields?.[columnKey] || "");
+      }
+      
+      if (!fieldValue.toLowerCase().includes(query)) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const filteredRows = measurementRows
     .filter((row) =>
       selectedArea === "all" ? true : getRowArea(row) === selectedArea,
@@ -2390,7 +2500,8 @@ export default function MeasurementSheet() {
         row.type.toLowerCase().includes(query) ||
         row.mark.toLowerCase().includes(query)
       );
-    });
+    })
+    .filter(matchesColumnFilters);
   const subtotalQty = filteredRows.reduce((sum, row) => sum + row.qty, 0);
   const subtotalWeight = filteredRows.reduce(
     (sum, row) => sum + row.totalWeight,
@@ -2682,21 +2793,22 @@ export default function MeasurementSheet() {
         </CardHeader>
 
         <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table ref={tableRef} className="w-full text-sm">
-              <thead className="bg-muted/70">
-                {item?.department === "Piping-LHS" ? (
-                  <>
-                    <tr>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        S.NO.
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
+          <ScrollArea className="h-[500px] work-entries-scroll">
+            <div className="min-w-max">
+              <table ref={tableRef} className="w-full text-sm">
+                <thead className="bg-background sticky top-0 z-20 shadow-sm">
+                  {item?.department === "Piping-LHS" ? (
+                    <>
+                      <tr>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          S.NO.
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
                       >
                         Area
                       </th>
@@ -2840,6 +2952,92 @@ export default function MeasurementSheet() {
                         ))}
                       </tr>
                     )}
+                    {/* Column Filter Row for Piping-LHS */}
+                    <tr className="bg-muted">
+                      <th className="p-1"></th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["area"] || ""}
+                          onChange={(e) => handleColumnFilterChange("area", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["docNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("docNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["lineNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("lineNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["sheetNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("sheetNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["rev"] || ""}
+                          onChange={(e) => handleColumnFilterChange("rev", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["moc"] || ""}
+                          onChange={(e) => handleColumnFilterChange("moc", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["fjSj"] || ""}
+                          onChange={(e) => handleColumnFilterChange("fjSj", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["jointNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("jointNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["spoolNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("spoolNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      {breakupColumns.map((column) => (
+                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
+                      ))}
+                    </tr>
                   </>
                 ) : item?.department === "Equipment Insulation" ? (
                   <>
@@ -3002,6 +3200,79 @@ export default function MeasurementSheet() {
                         ))}
                       </tr>
                     )}
+                    {/* Column Filter Row for Equipment Insulation */}
+                    <tr className="bg-muted">
+                      <th className="p-1"></th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["equipmentNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("equipmentNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["equipmentName"] || ""}
+                          onChange={(e) => handleColumnFilterChange("equipmentName", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["portion"] || ""}
+                          onChange={(e) => handleColumnFilterChange("portion", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["position"] || ""}
+                          onChange={(e) => handleColumnFilterChange("position", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["temp"] || ""}
+                          onChange={(e) => handleColumnFilterChange("temp", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["moc"] || ""}
+                          onChange={(e) => handleColumnFilterChange("moc", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["insulationType"] || ""}
+                          onChange={(e) => handleColumnFilterChange("insulationType", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      {breakupColumns.map((column) => (
+                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
+                      ))}
+                      <th className="p-1"></th>
+                    </tr>
                   </>
                 ) : item?.department === "Piping Insulation" ? (
                   <>
@@ -3206,6 +3477,177 @@ export default function MeasurementSheet() {
                         ))}
                       </tr>
                     )}
+                    {/* Column Filter Row for Piping Insulation */}
+                    <tr className="bg-muted">
+                      <th className="p-1"></th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["location"] || ""}
+                          onChange={(e) => handleColumnFilterChange("location", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["drawingNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("drawingNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["sheetNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("sheetNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["moc"] || ""}
+                          onChange={(e) => handleColumnFilterChange("moc", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["lineSize"] || ""}
+                          onChange={(e) => handleColumnFilterChange("lineSize", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["pipeOD"] || ""}
+                          onChange={(e) => handleColumnFilterChange("pipeOD", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["insulationThickness"] || ""}
+                          onChange={(e) => handleColumnFilterChange("insulationThickness", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["insulationType"] || ""}
+                          onChange={(e) => handleColumnFilterChange("insulationType", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["temp"] || ""}
+                          onChange={(e) => handleColumnFilterChange("temp", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["pipeLength"] || ""}
+                          onChange={(e) => handleColumnFilterChange("pipeLength", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyElbow90"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyElbow90", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyElbow45"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyElbow45", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyTee"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyTee", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyReducer"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyReducer", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyEndCap"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyEndCap", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyFlangeRem"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyFlangeRem", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyValveRem"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyValveRem", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyFlangeFix"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyFlangeFix", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyValveFix"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyValveFix", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["qtyWeldValveFix"] || ""}
+                          onChange={(e) => handleColumnFilterChange("qtyWeldValveFix", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      {breakupColumns.map((column) => (
+                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
+                      ))}
+                      <th className="p-1"></th>
+                    </tr>
                   </>
                 ) : item?.department === "Structure" ? (
                   <>
@@ -3346,6 +3788,47 @@ export default function MeasurementSheet() {
                         ))}
                       </tr>
                     )}
+                    {/* Column Filter Row for Structure */}
+                    <tr className="bg-muted">
+                      <th className="p-1"></th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["type"] || ""}
+                          onChange={(e) => handleColumnFilterChange("type", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["structureType"] || ""}
+                          onChange={(e) => handleColumnFilterChange("structureType", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["mark"] || ""}
+                          onChange={(e) => handleColumnFilterChange("mark", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      {breakupColumns.map((column) => (
+                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
+                      ))}
+                      {customColumns.map((column) => (
+                        <th key={`filter-custom-${column.id}`} className="p-1"></th>
+                      ))}
+                      <th className="p-1"></th>
+                    </tr>
                   </>
                 ) : item?.department === "Piping-Spool Status" ? (
                   <>
@@ -3484,6 +3967,89 @@ export default function MeasurementSheet() {
                         ))}
                       </tr>
                     )}
+                    {/* Column Filter Row for Piping-Spool Status */}
+                    <tr className="bg-muted">
+                      <th className="p-1"></th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["area"] || ""}
+                          onChange={(e) => handleColumnFilterChange("area", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["drawingNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("drawingNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["revNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("revNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["sheetNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("sheetNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["spoolNo"] || ""}
+                          onChange={(e) => handleColumnFilterChange("spoolNo", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["lineSize"] || ""}
+                          onChange={(e) => handleColumnFilterChange("lineSize", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["baseMaterial"] || ""}
+                          onChange={(e) => handleColumnFilterChange("baseMaterial", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["paintSystem"] || ""}
+                          onChange={(e) => handleColumnFilterChange("paintSystem", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["remarks"] || ""}
+                          onChange={(e) => handleColumnFilterChange("remarks", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      {breakupColumns.map((column) => (
+                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
+                      ))}
+                      <th className="p-1"></th>
+                    </tr>
                   </>
                 ) : (
                   <>
@@ -3612,6 +4178,38 @@ export default function MeasurementSheet() {
                         ))}
                       </tr>
                     )}
+                    {/* Column Filter Row for Default/Others */}
+                    <tr className="bg-muted">
+                      <th className="p-1"></th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["type"] || ""}
+                          onChange={(e) => handleColumnFilterChange("type", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1">
+                        <Input
+                          placeholder="Search..."
+                          value={columnFilters["area"] || ""}
+                          onChange={(e) => handleColumnFilterChange("area", e.target.value)}
+                          className="h-7 text-xs w-full"
+                        />
+                      </th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      <th className="p-1"></th>
+                      {breakupColumns.map((column) => (
+                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
+                      ))}
+                      {customColumns.map((column) => (
+                        <th key={`filter-custom-${column.id}`} className="p-1"></th>
+                      ))}
+                      <th className="p-1"></th>
+                    </tr>
                   </>
                 )}
               </thead>
@@ -6768,6 +7366,9 @@ export default function MeasurementSheet() {
               </tbody>
             </table>
           </div>
+          <ScrollBar orientation="vertical" className="bg-slate-100 dark:bg-slate-800" />
+          <ScrollBar orientation="horizontal" className="bg-slate-100 dark:bg-slate-800" />
+        </ScrollArea>
         </CardContent>
 
         {isAddingRows && (
