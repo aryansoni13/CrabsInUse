@@ -615,7 +615,9 @@ export default function MeasurementSheet() {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedArea, setSelectedArea] = useState<string>("all");
-  const [columnFilters, setColumnFilters] = useState<Record<string, string>>({});
+  const [columnFilters, setColumnFilters] = useState<Record<string, string>>(
+    {},
+  );
   const tableRef = useRef<HTMLTableElement>(null);
   const { toast } = useToast();
 
@@ -2390,17 +2392,19 @@ export default function MeasurementSheet() {
   const matchesColumnFilters = (row: MeasurementRow): boolean => {
     for (const [columnKey, filterValue] of Object.entries(columnFilters)) {
       if (!filterValue.trim()) continue;
-      
+
       const query = filterValue.toLowerCase();
       let fieldValue = "";
-      
+
       // Map column keys to row fields
       switch (columnKey) {
         case "location":
           fieldValue = String(row.customFields?.["location"] || row.type || "");
           break;
         case "drawingNo":
-          fieldValue = String(row.customFields?.["drawingNo"] || row.mark || "");
+          fieldValue = String(
+            row.customFields?.["drawingNo"] || row.mark || "",
+          );
           break;
         case "sheetNo":
           fieldValue = String(row.customFields?.["sheetNo"] || "");
@@ -2454,10 +2458,14 @@ export default function MeasurementSheet() {
           fieldValue = String(row.customFields?.["spoolNo"] || "");
           break;
         case "equipmentNo":
-          fieldValue = String(row.customFields?.["equipmentNo"] || row.type || "");
+          fieldValue = String(
+            row.customFields?.["equipmentNo"] || row.type || "",
+          );
           break;
         case "equipmentName":
-          fieldValue = String(row.customFields?.["equipmentName"] || row.mark || "");
+          fieldValue = String(
+            row.customFields?.["equipmentName"] || row.mark || "",
+          );
           break;
         case "portion":
           fieldValue = String(row.customFields?.["portion"] || "");
@@ -2478,7 +2486,7 @@ export default function MeasurementSheet() {
           // Check customFields for any other column
           fieldValue = String(row.customFields?.[columnKey] || "");
       }
-      
+
       if (!fieldValue.toLowerCase().includes(query)) {
         return false;
       }
@@ -2806,1444 +2814,3319 @@ export default function MeasurementSheet() {
                         <th
                           className="p-3 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Area
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        DOC. NO.
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        LINE NO.
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        SHEET NO
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Rev
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        MOC
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        FJ/SJ
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Joint No.
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        SPOOL NO.
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Dia (Inch)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Thickness (MM)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Schedule
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Joint Type
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Component Part 1
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Component Part 2
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Total ({item?.unitOfMeasurement || "MT"})
-                      </th>
-                      {headerGroups.map((group) => (
-                        <th
-                          key={group.itemId}
-                          colSpan={group.count}
-                          className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
                         >
-                          <Input
-                            value={
-                              group.shortDescription || group.description || ""
-                            }
-                            onChange={(e) =>
-                              handleShortDescriptionChange(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            onBlur={(e) =>
-                              handleShortDescriptionBlur(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
-                            placeholder="Short Description"
-                          />
+                          Area
                         </th>
-                      ))}
-                    </tr>
-                    {hasBreakups && (
-                      <tr>
-                        {breakupColumns.map((column) => (
-                          <th
-                            key={`${column.itemId}-${column.name}`}
-                            className="p-3 text-center"
-                          >
-                            <div className="flex flex-col items-center justify-center">
-                              <span className="font-bold text-xs">
-                                {column.percentage}%
-                              </span>
-                              <span
-                                className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
-                                title={column.name}
-                              >
-                                {column.name}
-                              </span>
-                            </div>
-                          </th>
-                        ))}
-                      </tr>
-                    )}
-                    {/* Column Filter Row for Piping-LHS */}
-                    <tr className="bg-muted">
-                      <th className="p-1"></th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["area"] || ""}
-                          onChange={(e) => handleColumnFilterChange("area", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["docNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("docNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["lineNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("lineNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["sheetNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("sheetNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["rev"] || ""}
-                          onChange={(e) => handleColumnFilterChange("rev", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["moc"] || ""}
-                          onChange={(e) => handleColumnFilterChange("moc", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["fjSj"] || ""}
-                          onChange={(e) => handleColumnFilterChange("fjSj", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["jointNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("jointNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["spoolNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("spoolNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      {breakupColumns.map((column) => (
-                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
-                      ))}
-                    </tr>
-                  </>
-                ) : item?.department === "Equipment Insulation" ? (
-                  <>
-                    <tr>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        SR. NO
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Equipment No
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Equipment Name
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Portion
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Position
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Temperature (°C)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        MOC
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Insulation Type
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Thickness (mm)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Insulated Dia (m)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Height/Length (m)
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Shell Area (m²)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Factor for Dish End
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Dish End Nos
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Dish Area (m²)
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Other Area (m²)
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Total Area (m²)
-                      </th>
-                      {headerGroups.map((group) => (
                         <th
-                          key={group.itemId}
-                          colSpan={group.count}
-                          className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
-                        >
-                          <Input
-                            value={
-                              group.shortDescription || group.description || ""
-                            }
-                            onChange={(e) =>
-                              handleShortDescriptionChange(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            onBlur={(e) =>
-                              handleShortDescriptionBlur(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
-                            placeholder="Short Description"
-                          />
-                        </th>
-                      ))}
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                    {hasBreakups && (
-                      <tr>
-                        {breakupColumns.map((column) => (
-                          <th
-                            key={`${column.itemId}-${column.name}`}
-                            className="p-3 text-center"
-                          >
-                            <div className="flex flex-col items-center justify-center">
-                              <span className="font-bold text-xs">
-                                {column.percentage}%
-                              </span>
-                              <span
-                                className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
-                                title={column.name}
-                              >
-                                {column.name}
-                              </span>
-                            </div>
-                          </th>
-                        ))}
-                      </tr>
-                    )}
-                    {/* Column Filter Row for Equipment Insulation */}
-                    <tr className="bg-muted">
-                      <th className="p-1"></th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["equipmentNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("equipmentNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["equipmentName"] || ""}
-                          onChange={(e) => handleColumnFilterChange("equipmentName", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["portion"] || ""}
-                          onChange={(e) => handleColumnFilterChange("portion", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["position"] || ""}
-                          onChange={(e) => handleColumnFilterChange("position", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["temp"] || ""}
-                          onChange={(e) => handleColumnFilterChange("temp", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["moc"] || ""}
-                          onChange={(e) => handleColumnFilterChange("moc", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["insulationType"] || ""}
-                          onChange={(e) => handleColumnFilterChange("insulationType", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      {breakupColumns.map((column) => (
-                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
-                      ))}
-                      <th className="p-1"></th>
-                    </tr>
-                  </>
-                ) : item?.department === "Piping Insulation" ? (
-                  <>
-                    <tr>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Sr. No.
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Location
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Drawing No.
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Sheet No.
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        MOC
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Line Size
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Pipe OD (mm)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Insulation Thickness (mm)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Insulation Type
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Temp (°C)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Pipe Length (m)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        90° Elbow
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        45° Elbow
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Tee
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Reducer
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        End Cap
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Flg Rem
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Vlv Rem
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Flg Fix
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Vlv Fix
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Weld Vlv
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Fittings Length (m)
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        RMT (m)
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Area (sqm)
-                      </th>
-                      {headerGroups.map((group) => (
-                        <th
-                          key={group.itemId}
-                          colSpan={group.count}
-                          className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
-                        >
-                          <Input
-                            value={
-                              group.shortDescription || group.description || ""
-                            }
-                            onChange={(e) =>
-                              handleShortDescriptionChange(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            onBlur={(e) =>
-                              handleShortDescriptionBlur(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
-                            placeholder="Short Description"
-                          />
-                        </th>
-                      ))}
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                    {hasBreakups && (
-                      <tr>
-                        {breakupColumns.map((column) => (
-                          <th
-                            key={`${column.itemId}-${column.name}`}
-                            className="p-3 text-center"
-                          >
-                            <div className="flex flex-col items-center justify-center">
-                              <span className="font-bold text-xs">
-                                {column.percentage}%
-                              </span>
-                              <span
-                                className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
-                                title={column.name}
-                              >
-                                {column.name}
-                              </span>
-                            </div>
-                          </th>
-                        ))}
-                      </tr>
-                    )}
-                    {/* Column Filter Row for Piping Insulation */}
-                    <tr className="bg-muted">
-                      <th className="p-1"></th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["location"] || ""}
-                          onChange={(e) => handleColumnFilterChange("location", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["drawingNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("drawingNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["sheetNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("sheetNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["moc"] || ""}
-                          onChange={(e) => handleColumnFilterChange("moc", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["lineSize"] || ""}
-                          onChange={(e) => handleColumnFilterChange("lineSize", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["pipeOD"] || ""}
-                          onChange={(e) => handleColumnFilterChange("pipeOD", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["insulationThickness"] || ""}
-                          onChange={(e) => handleColumnFilterChange("insulationThickness", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["insulationType"] || ""}
-                          onChange={(e) => handleColumnFilterChange("insulationType", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["temp"] || ""}
-                          onChange={(e) => handleColumnFilterChange("temp", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["pipeLength"] || ""}
-                          onChange={(e) => handleColumnFilterChange("pipeLength", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyElbow90"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyElbow90", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyElbow45"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyElbow45", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyTee"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyTee", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyReducer"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyReducer", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyEndCap"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyEndCap", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyFlangeRem"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyFlangeRem", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyValveRem"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyValveRem", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyFlangeFix"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyFlangeFix", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyValveFix"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyValveFix", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["qtyWeldValveFix"] || ""}
-                          onChange={(e) => handleColumnFilterChange("qtyWeldValveFix", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      {breakupColumns.map((column) => (
-                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
-                      ))}
-                      <th className="p-1"></th>
-                    </tr>
-                  </>
-                ) : item?.department === "Structure" ? (
-                  <>
-                    <tr>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Sr.
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Item Description
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Type
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Mark No.
-                      </th>
-
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Unit Weight
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Length
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Width
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Thickness
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Qty
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Total ({item?.unitOfMeasurement || "MT"})
-                      </th>
-                      {headerGroups.map((group) => (
-                        <th
-                          key={group.itemId}
-                          colSpan={group.count}
-                          className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
-                        >
-                          <Input
-                            value={
-                              group.shortDescription || group.description || ""
-                            }
-                            onChange={(e) =>
-                              handleShortDescriptionChange(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            onBlur={(e) =>
-                              handleShortDescriptionBlur(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
-                            placeholder="Short Description"
-                          />
-                        </th>
-                      ))}
-                      {customColumns.map((column) => (
-                        <th
-                          key={column.id}
                           className="p-3 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
-                          <div className="flex items-center justify-center gap-1">
-                            {column.title}
-                            <button
-                              className="text-muted-foreground hover:text-destructive"
-                              onClick={() =>
-                                handleDeleteCustomColumn(column.id)
-                              }
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </div>
+                          DOC. NO.
                         </th>
-                      ))}
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                    {hasBreakups && (
-                      <tr>
-                        {breakupColumns.map((column) => (
-                          <th
-                            key={`${column.itemId}-${column.name}`}
-                            className="p-3 text-center"
-                          >
-                            <div className="flex flex-col items-center justify-center">
-                              <span className="font-bold text-xs">
-                                {column.percentage}%
-                              </span>
-                              <span
-                                className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
-                                title={column.name}
-                              >
-                                {column.name}
-                              </span>
-                            </div>
-                          </th>
-                        ))}
-                      </tr>
-                    )}
-                    {/* Column Filter Row for Structure */}
-                    <tr className="bg-muted">
-                      <th className="p-1"></th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["type"] || ""}
-                          onChange={(e) => handleColumnFilterChange("type", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["structureType"] || ""}
-                          onChange={(e) => handleColumnFilterChange("structureType", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["mark"] || ""}
-                          onChange={(e) => handleColumnFilterChange("mark", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      {breakupColumns.map((column) => (
-                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
-                      ))}
-                      {customColumns.map((column) => (
-                        <th key={`filter-custom-${column.id}`} className="p-1"></th>
-                      ))}
-                      <th className="p-1"></th>
-                    </tr>
-                  </>
-                ) : item?.department === "Piping-Spool Status" ? (
-                  <>
-                    <tr>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Sr. No.
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Area
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Drawing No
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        RevNo
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        SheetNo
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        SpoolNo
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Line Size
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        BaseMaterial
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Length
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        InchMeter
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        SurfaceArea
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        PaintSystem
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Remarks
-                      </th>
-                      {headerGroups.map((group) => (
                         <th
-                          key={group.itemId}
-                          colSpan={group.count}
-                          className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
-                        >
-                          <Input
-                            value={
-                              group.shortDescription || group.description || ""
-                            }
-                            onChange={(e) =>
-                              handleShortDescriptionChange(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            onBlur={(e) =>
-                              handleShortDescriptionBlur(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
-                            placeholder="Short Description"
-                          />
-                        </th>
-                      ))}
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                    {hasBreakups && (
-                      <tr>
-                        {breakupColumns.map((column) => (
-                          <th
-                            key={`${column.itemId}-${column.name}`}
-                            className="p-3 text-center"
-                          >
-                            <div className="flex flex-col items-center justify-center">
-                              <span className="font-bold text-xs">
-                                {column.percentage}%
-                              </span>
-                              <span
-                                className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
-                                title={column.name}
-                              >
-                                {column.name}
-                              </span>
-                            </div>
-                          </th>
-                        ))}
-                      </tr>
-                    )}
-                    {/* Column Filter Row for Piping-Spool Status */}
-                    <tr className="bg-muted">
-                      <th className="p-1"></th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["area"] || ""}
-                          onChange={(e) => handleColumnFilterChange("area", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["drawingNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("drawingNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["revNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("revNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["sheetNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("sheetNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["spoolNo"] || ""}
-                          onChange={(e) => handleColumnFilterChange("spoolNo", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["lineSize"] || ""}
-                          onChange={(e) => handleColumnFilterChange("lineSize", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["baseMaterial"] || ""}
-                          onChange={(e) => handleColumnFilterChange("baseMaterial", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["paintSystem"] || ""}
-                          onChange={(e) => handleColumnFilterChange("paintSystem", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["remarks"] || ""}
-                          onChange={(e) => handleColumnFilterChange("remarks", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      {breakupColumns.map((column) => (
-                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
-                      ))}
-                      <th className="p-1"></th>
-                    </tr>
-                  </>
-                ) : (
-                  <>
-                    <tr>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Sr.
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Item Description
-                      </th>
-                      <th
-                        className="p-3 text-left"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Area
-                      </th>
-
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        {measurementLabels[0]}
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        {measurementLabels[1]}
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        {measurementLabels[2]}
-                      </th>
-                      <th
-                        className="p-3 text-center"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Qty
-                      </th>
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Total ({item?.unitOfMeasurement || "MT"})
-                      </th>
-                      {headerGroups.map((group) => (
-                        <th
-                          key={group.itemId}
-                          colSpan={group.count}
-                          className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
-                        >
-                          <Input
-                            value={
-                              group.shortDescription || group.description || ""
-                            }
-                            onChange={(e) =>
-                              handleShortDescriptionChange(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            onBlur={(e) =>
-                              handleShortDescriptionBlur(
-                                group.itemId,
-                                e.target.value,
-                              )
-                            }
-                            className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
-                            placeholder="Short Description"
-                          />
-                        </th>
-                      ))}
-                      {customColumns.map((column) => (
-                        <th
-                          key={column.id}
                           className="p-3 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
-                          <div className="flex items-center justify-center gap-1">
-                            {column.title}
-                            <button
-                              className="text-muted-foreground hover:text-destructive"
-                              onClick={() =>
-                                handleDeleteCustomColumn(column.id)
-                              }
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          </div>
+                          LINE NO.
                         </th>
-                      ))}
-                      <th
-                        className="p-3 text-right"
-                        rowSpan={hasBreakups ? 2 : 1}
-                      >
-                        Actions
-                      </th>
-                    </tr>
-                    {hasBreakups && (
-                      <tr>
-                        {breakupColumns.map((column) => (
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          SHEET NO
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Rev
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          MOC
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          FJ/SJ
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Joint No.
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          SPOOL NO.
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Dia (Inch)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Thickness (MM)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Schedule
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Joint Type
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Component Part 1
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Component Part 2
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Total ({item?.unitOfMeasurement || "MT"})
+                        </th>
+                        {headerGroups.map((group) => (
                           <th
-                            key={`${column.itemId}-${column.name}`}
-                            className="p-3 text-center"
+                            key={group.itemId}
+                            colSpan={group.count}
+                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
                           >
-                            <div className="flex flex-col items-center justify-center">
-                              <span className="font-bold text-xs">
-                                {column.percentage}%
-                              </span>
-                              <span
-                                className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
-                                title={column.name}
-                              >
-                                {column.name}
-                              </span>
-                            </div>
+                            <Input
+                              value={
+                                group.shortDescription ||
+                                group.description ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleShortDescriptionChange(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              onBlur={(e) =>
+                                handleShortDescriptionBlur(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
+                              placeholder="Short Description"
+                            />
                           </th>
                         ))}
                       </tr>
-                    )}
-                    {/* Column Filter Row for Default/Others */}
-                    <tr className="bg-muted">
-                      <th className="p-1"></th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["type"] || ""}
-                          onChange={(e) => handleColumnFilterChange("type", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1">
-                        <Input
-                          placeholder="Search..."
-                          value={columnFilters["area"] || ""}
-                          onChange={(e) => handleColumnFilterChange("area", e.target.value)}
-                          className="h-7 text-xs w-full"
-                        />
-                      </th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      <th className="p-1"></th>
-                      {breakupColumns.map((column) => (
-                        <th key={`filter-${column.itemId}-${column.name}`} className="p-1"></th>
-                      ))}
-                      {customColumns.map((column) => (
-                        <th key={`filter-custom-${column.id}`} className="p-1"></th>
-                      ))}
-                      <th className="p-1"></th>
-                    </tr>
-                  </>
-                )}
-              </thead>
-              <tbody className="order-blue-100">
-                {filteredRows.length === 0 && !isAddingRows && (
-                  <tr>
-                    <td
-                      className="p-6 text-center text-muted-foreground"
-                      colSpan={
-                        item?.department === "Piping-LHS"
-                          ? 17 + breakupColumns.length
-                          : item?.department === "Piping Insulation"
-                            ? 25 + breakupColumns.length
-                            : item?.department === "Equipment Insulation"
-                              ? 17 + breakupColumns.length
-                              : item?.department === "Piping-Spool Status"
-                                ? 14
-                                : 11 + customColumns.length
-                      }
-                    >
-                      No measurement entries match your filters. Add a new row
-                      to get started.
-                    </td>
-                  </tr>
-                )}
+                      {hasBreakups && (
+                        <tr>
+                          {breakupColumns.map((column) => (
+                            <th
+                              key={`${column.itemId}-${column.name}`}
+                              className="p-3 text-center"
+                            >
+                              <div className="flex flex-col items-center justify-center">
+                                <span className="font-bold text-xs">
+                                  {column.percentage}%
+                                </span>
+                                <span
+                                  className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
+                                  title={column.name}
+                                >
+                                  {column.name}
+                                </span>
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      )}
+                      {/* Column Filter Row for Piping-LHS */}
+                      <tr className="bg-muted">
+                        <th className="p-1"></th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["area"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("area", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["docNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("docNo", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["lineNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("lineNo", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["sheetNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "sheetNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["rev"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("rev", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["moc"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("moc", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["fjSj"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("fjSj", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["jointNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "jointNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["spoolNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "spoolNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        {breakupColumns.map((column) => (
+                          <th
+                            key={`filter-${column.itemId}-${column.name}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                      </tr>
+                    </>
+                  ) : item?.department === "Equipment Insulation" ? (
+                    <>
+                      <tr>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          SR. NO
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Equipment No
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Equipment Name
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Portion
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Position
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Temperature (°C)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          MOC
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Insulation Type
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Thickness (mm)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Insulated Dia (m)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Height/Length (m)
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Shell Area (m²)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Factor for Dish End
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Dish End Nos
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Dish Area (m²)
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Other Area (m²)
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Total Area (m²)
+                        </th>
+                        {headerGroups.map((group) => (
+                          <th
+                            key={group.itemId}
+                            colSpan={group.count}
+                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                          >
+                            <Input
+                              value={
+                                group.shortDescription ||
+                                group.description ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleShortDescriptionChange(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              onBlur={(e) =>
+                                handleShortDescriptionBlur(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
+                              placeholder="Short Description"
+                            />
+                          </th>
+                        ))}
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                      {hasBreakups && (
+                        <tr>
+                          {breakupColumns.map((column) => (
+                            <th
+                              key={`${column.itemId}-${column.name}`}
+                              className="p-3 text-center"
+                            >
+                              <div className="flex flex-col items-center justify-center">
+                                <span className="font-bold text-xs">
+                                  {column.percentage}%
+                                </span>
+                                <span
+                                  className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
+                                  title={column.name}
+                                >
+                                  {column.name}
+                                </span>
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      )}
+                      {/* Column Filter Row for Equipment Insulation */}
+                      <tr className="bg-muted">
+                        <th className="p-1"></th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["equipmentNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "equipmentNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["equipmentName"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "equipmentName",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["portion"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "portion",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["position"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "position",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["temp"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("temp", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["moc"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("moc", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["insulationType"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "insulationType",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        {breakupColumns.map((column) => (
+                          <th
+                            key={`filter-${column.itemId}-${column.name}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                        <th className="p-1"></th>
+                      </tr>
+                    </>
+                  ) : item?.department === "Piping Insulation" ? (
+                    <>
+                      <tr>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Sr. No.
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Location
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Drawing No.
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Sheet No.
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          MOC
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Line Size
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Pipe OD (mm)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Insulation Thickness (mm)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Insulation Type
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Temp (°C)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Pipe Length (m)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          90° Elbow
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          45° Elbow
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Tee
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Reducer
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          End Cap
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Flg Rem
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Vlv Rem
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Flg Fix
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Vlv Fix
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Weld Vlv
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Fittings Length (m)
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          RMT (m)
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Area (sqm)
+                        </th>
+                        {headerGroups.map((group) => (
+                          <th
+                            key={group.itemId}
+                            colSpan={group.count}
+                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                          >
+                            <Input
+                              value={
+                                group.shortDescription ||
+                                group.description ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleShortDescriptionChange(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              onBlur={(e) =>
+                                handleShortDescriptionBlur(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
+                              placeholder="Short Description"
+                            />
+                          </th>
+                        ))}
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                      {hasBreakups && (
+                        <tr>
+                          {breakupColumns.map((column) => (
+                            <th
+                              key={`${column.itemId}-${column.name}`}
+                              className="p-3 text-center"
+                            >
+                              <div className="flex flex-col items-center justify-center">
+                                <span className="font-bold text-xs">
+                                  {column.percentage}%
+                                </span>
+                                <span
+                                  className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
+                                  title={column.name}
+                                >
+                                  {column.name}
+                                </span>
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      )}
+                      {/* Column Filter Row for Piping Insulation */}
+                      <tr className="bg-muted">
+                        <th className="p-1"></th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["location"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "location",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["drawingNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "drawingNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["sheetNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "sheetNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["moc"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("moc", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["lineSize"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "lineSize",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["pipeOD"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("pipeOD", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["insulationThickness"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "insulationThickness",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["insulationType"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "insulationType",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["temp"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("temp", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["pipeLength"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "pipeLength",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyElbow90"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyElbow90",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyElbow45"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyElbow45",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyTee"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("qtyTee", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyReducer"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyReducer",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyEndCap"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyEndCap",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyFlangeRem"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyFlangeRem",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyValveRem"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyValveRem",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyFlangeFix"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyFlangeFix",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyValveFix"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyValveFix",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["qtyWeldValveFix"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "qtyWeldValveFix",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        {breakupColumns.map((column) => (
+                          <th
+                            key={`filter-${column.itemId}-${column.name}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                        <th className="p-1"></th>
+                      </tr>
+                    </>
+                  ) : item?.department === "Structure" ? (
+                    <>
+                      <tr>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Sr.
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Item Description
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Type
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Mark No.
+                        </th>
 
-                {filteredRows.map((row, index) => {
-                  const isRowLocked = Object.values(row.breakupStatus).some(
-                    (status) => status.done || (status.lockedQty || 0) > 0,
-                  );
-                  if (item?.department === "Piping-LHS") {
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Unit Weight
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Length
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Width
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Thickness
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Qty
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Total ({item?.unitOfMeasurement || "MT"})
+                        </th>
+                        {headerGroups.map((group) => (
+                          <th
+                            key={group.itemId}
+                            colSpan={group.count}
+                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                          >
+                            <Input
+                              value={
+                                group.shortDescription ||
+                                group.description ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleShortDescriptionChange(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              onBlur={(e) =>
+                                handleShortDescriptionBlur(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
+                              placeholder="Short Description"
+                            />
+                          </th>
+                        ))}
+                        {customColumns.map((column) => (
+                          <th
+                            key={column.id}
+                            className="p-3 text-center"
+                            rowSpan={hasBreakups ? 2 : 1}
+                          >
+                            <div className="flex items-center justify-center gap-1">
+                              {column.title}
+                              <button
+                                className="text-muted-foreground hover:text-destructive"
+                                onClick={() =>
+                                  handleDeleteCustomColumn(column.id)
+                                }
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </th>
+                        ))}
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                      {hasBreakups && (
+                        <tr>
+                          {breakupColumns.map((column) => (
+                            <th
+                              key={`${column.itemId}-${column.name}`}
+                              className="p-3 text-center"
+                            >
+                              <div className="flex flex-col items-center justify-center">
+                                <span className="font-bold text-xs">
+                                  {column.percentage}%
+                                </span>
+                                <span
+                                  className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
+                                  title={column.name}
+                                >
+                                  {column.name}
+                                </span>
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      )}
+                      {/* Column Filter Row for Structure */}
+                      <tr className="bg-muted">
+                        <th className="p-1"></th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["type"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("type", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["structureType"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "structureType",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["mark"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("mark", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        {breakupColumns.map((column) => (
+                          <th
+                            key={`filter-${column.itemId}-${column.name}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                        {customColumns.map((column) => (
+                          <th
+                            key={`filter-custom-${column.id}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                        <th className="p-1"></th>
+                      </tr>
+                    </>
+                  ) : item?.department === "Piping-Spool Status" ? (
+                    <>
+                      <tr>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Sr. No.
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Area
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Drawing No
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          RevNo
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          SheetNo
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          SpoolNo
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Line Size
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          BaseMaterial
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Length
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          InchMeter
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          SurfaceArea
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          PaintSystem
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Remarks
+                        </th>
+                        {headerGroups.map((group) => (
+                          <th
+                            key={group.itemId}
+                            colSpan={group.count}
+                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                          >
+                            <Input
+                              value={
+                                group.shortDescription ||
+                                group.description ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleShortDescriptionChange(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              onBlur={(e) =>
+                                handleShortDescriptionBlur(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
+                              placeholder="Short Description"
+                            />
+                          </th>
+                        ))}
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                      {hasBreakups && (
+                        <tr>
+                          {breakupColumns.map((column) => (
+                            <th
+                              key={`${column.itemId}-${column.name}`}
+                              className="p-3 text-center"
+                            >
+                              <div className="flex flex-col items-center justify-center">
+                                <span className="font-bold text-xs">
+                                  {column.percentage}%
+                                </span>
+                                <span
+                                  className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
+                                  title={column.name}
+                                >
+                                  {column.name}
+                                </span>
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      )}
+                      {/* Column Filter Row for Piping-Spool Status */}
+                      <tr className="bg-muted">
+                        <th className="p-1"></th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["area"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("area", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["drawingNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "drawingNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["revNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("revNo", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["sheetNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "sheetNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["spoolNo"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "spoolNo",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["lineSize"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "lineSize",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["baseMaterial"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "baseMaterial",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["paintSystem"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "paintSystem",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["remarks"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange(
+                                "remarks",
+                                e.target.value,
+                              )
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        {breakupColumns.map((column) => (
+                          <th
+                            key={`filter-${column.itemId}-${column.name}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                        <th className="p-1"></th>
+                      </tr>
+                    </>
+                  ) : (
+                    <>
+                      <tr>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Sr.
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Item Description
+                        </th>
+                        <th
+                          className="p-3 text-left"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Area
+                        </th>
+
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          {measurementLabels[0]}
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          {measurementLabels[1]}
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          {measurementLabels[2]}
+                        </th>
+                        <th
+                          className="p-3 text-center"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Qty
+                        </th>
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Total ({item?.unitOfMeasurement || "MT"})
+                        </th>
+                        {headerGroups.map((group) => (
+                          <th
+                            key={group.itemId}
+                            colSpan={group.count}
+                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                          >
+                            <Input
+                              value={
+                                group.shortDescription ||
+                                group.description ||
+                                ""
+                              }
+                              onChange={(e) =>
+                                handleShortDescriptionChange(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              onBlur={(e) =>
+                                handleShortDescriptionBlur(
+                                  group.itemId,
+                                  e.target.value,
+                                )
+                              }
+                              className="bg-transparent border-transparent shadow-none h-8 text-center font-bold text-muted-foreground focus-visible:ring-0 focus-visible:border-input hover:border-input placeholder:text-muted-foreground/50 w-full"
+                              placeholder="Short Description"
+                            />
+                          </th>
+                        ))}
+                        {customColumns.map((column) => (
+                          <th
+                            key={column.id}
+                            className="p-3 text-center"
+                            rowSpan={hasBreakups ? 2 : 1}
+                          >
+                            <div className="flex items-center justify-center gap-1">
+                              {column.title}
+                              <button
+                                className="text-muted-foreground hover:text-destructive"
+                                onClick={() =>
+                                  handleDeleteCustomColumn(column.id)
+                                }
+                              >
+                                <X className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </th>
+                        ))}
+                        <th
+                          className="p-3 text-right"
+                          rowSpan={hasBreakups ? 2 : 1}
+                        >
+                          Actions
+                        </th>
+                      </tr>
+                      {hasBreakups && (
+                        <tr>
+                          {breakupColumns.map((column) => (
+                            <th
+                              key={`${column.itemId}-${column.name}`}
+                              className="p-3 text-center"
+                            >
+                              <div className="flex flex-col items-center justify-center">
+                                <span className="font-bold text-xs">
+                                  {column.percentage}%
+                                </span>
+                                <span
+                                  className="text-[10px] text-muted-foreground whitespace-nowrap max-w-[100px] overflow-hidden text-ellipsis"
+                                  title={column.name}
+                                >
+                                  {column.name}
+                                </span>
+                              </div>
+                            </th>
+                          ))}
+                        </tr>
+                      )}
+                      {/* Column Filter Row for Default/Others */}
+                      <tr className="bg-muted">
+                        <th className="p-1"></th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["type"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("type", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1">
+                          <Input
+                            placeholder="Search..."
+                            value={columnFilters["area"] || ""}
+                            onChange={(e) =>
+                              handleColumnFilterChange("area", e.target.value)
+                            }
+                            className="h-7 text-xs w-full"
+                          />
+                        </th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        <th className="p-1"></th>
+                        {breakupColumns.map((column) => (
+                          <th
+                            key={`filter-${column.itemId}-${column.name}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                        {customColumns.map((column) => (
+                          <th
+                            key={`filter-custom-${column.id}`}
+                            className="p-1"
+                          ></th>
+                        ))}
+                        <th className="p-1"></th>
+                      </tr>
+                    </>
+                  )}
+                </thead>
+                <tbody className="order-blue-100">
+                  {filteredRows.length === 0 && !isAddingRows && (
+                    <tr>
+                      <td
+                        className="p-6 text-center text-muted-foreground"
+                        colSpan={
+                          item?.department === "Piping-LHS"
+                            ? 17 + breakupColumns.length
+                            : item?.department === "Piping Insulation"
+                              ? 25 + breakupColumns.length
+                              : item?.department === "Equipment Insulation"
+                                ? 17 + breakupColumns.length
+                                : item?.department === "Piping-Spool Status"
+                                  ? 14
+                                  : 11 + customColumns.length
+                        }
+                      >
+                        No measurement entries match your filters. Add a new row
+                        to get started.
+                      </td>
+                    </tr>
+                  )}
+
+                  {filteredRows.map((row, index) => {
+                    const isRowLocked = Object.values(row.breakupStatus).some(
+                      (status) => status.done || (status.lockedQty || 0) > 0,
+                    );
+                    if (item?.department === "Piping-LHS") {
+                      return (
+                        <tr
+                          key={row.id}
+                          className="border-b last:border-b-0 hover:bg-muted/30"
+                        >
+                          <td className="p-3 align-top">{index + 1}</td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.area || ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  area: e.target.value,
+                                })
+                              }
+                              placeholder="Area"
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["docNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "docNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["lineNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "lineNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["sheetNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "sheetNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["rev"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "rev",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(row.customFields?.["moc"] || "")}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(row.id, "moc", value)
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16">
+                                <SelectValue placeholder="" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {MOC_OPTIONS.map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["fjSj"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "fjSj",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["jointNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "jointNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["spoolNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "spoolNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.width ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  width: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.thickness ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  thickness: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["schedule"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "schedule",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["jointType"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "jointType",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.type}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  type: e.target.value,
+                                })
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["componentPart2"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "componentPart2",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top text-right font-semibold">
+                            {row.totalWeight.toFixed(3)}
+                          </td>
+                          {breakupKeys.map((key) => {
+                            const [itemIdStr, percentageStr, ...nameParts] =
+                              key.split("-");
+                            const isLegacy =
+                              !key.includes(row.itemId) &&
+                              !itemIdStr.startsWith(row.itemId); // Simple check
+
+                            // If column itemId doesn't match row itemId, show N/A
+                            // However, we must reconstruct column object from key or lookup
+                            // Wait, breakupKeys is strings.
+                            // Better to use breakupColumns directly in map?
+
+                            // No, the map above uses breakupKeys which was derived from breakupColumns.
+                            // But we need to know if THIS column key belongs to THIS row.
+                            // The key format is itemId-percentage-name.
+
+                            // Try to find status with new key, then fallback to legacy
+                            const legacyKey = `${percentageStr}%-${nameParts.join("-")}`;
+                            const status =
+                              row.breakupStatus[key] ||
+                              row.breakupStatus[legacyKey];
+                            const isLocked = !!status?.done;
+                            const completedQty = status?.completedQty || 0;
+                            const isPart =
+                              completedQty > 0 && completedQty < row.qty;
+
+                            // Get item description for this milestone to check group rules
+                            const milestoneItemDesc =
+                              headerGroups.find((hg) => hg.itemId === itemIdStr)
+                                ?.description || "";
+                            const isDisabledByGroup = isMilestoneDisabled(
+                              row,
+                              milestoneItemDesc,
+                            );
+                            return (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center"
+                              >
+                                <div className="flex flex-col items-center gap-1">
+                                  {isLocked || isRowLocked ? (
+                                    <div
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      title="Locked"
+                                    >
+                                      <Lock className="h-4 w-4" />
+                                    </div>
+                                  ) : (
+                                    <Input
+                                      type="text"
+                                      value={
+                                        row.breakupStatus[key]?.inputValue || ""
+                                      }
+                                      onChange={(e) =>
+                                        handleInlineQtyUpdate(
+                                          row.id,
+                                          key,
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="h-8 w-16 text-center border-input"
+                                      disabled={isDisabledByGroup}
+                                      placeholder=""
+                                      title={
+                                        isDisabledByGroup
+                                          ? "Disabled by group rule"
+                                          : "Any input = total qty for billing"
+                                      }
+                                    />
+                                  )}
+                                </div>
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    }
+                    if (item?.department === "Equipment Insulation") {
+                      return (
+                        <tr
+                          key={row.id}
+                          className="border-b last:border-b-0 hover:bg-muted/30"
+                        >
+                          <td className="p-3 align-top">{index + 1}</td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["equipmentNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "equipmentNo",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Tag No."
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["equipmentName"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "equipmentName",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Name/Type"
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(
+                                row.customFields?.["portion"] || "",
+                              )}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "portion",
+                                  value,
+                                )
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {EQUIPMENT_PORTION_OPTIONS.map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(
+                                row.customFields?.["position"] || "",
+                              )}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "position",
+                                  value,
+                                )
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                <SelectValue placeholder="Select" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {EQUIPMENT_POSITION_OPTIONS.map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.customFields?.["temp"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "temp",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="1"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(row.customFields?.["moc"] || "")}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(row.id, "moc", value)
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="h-8 w-20">
+                                <SelectValue placeholder="" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {EQUIPMENT_MOC_OPTIONS.map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(
+                                row.customFields?.["insulationType"] || "",
+                              )}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "insulationType",
+                                  value,
+                                )
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                <SelectValue placeholder="" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {EQUIPMENT_INSULATION_TYPE_OPTIONS.map(
+                                  (option) => (
+                                    <SelectItem key={option} value={option}>
+                                      {option}
+                                    </SelectItem>
+                                  ),
+                                )}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.customFields?.["thickness"] ?? ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "thickness",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="1"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.customFields?.["insulatedDia"] ?? ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "insulatedDia",
+                                  e.target.value,
+                                )
+                              }
+                              className="h-8 w-20 text-center"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.length ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  length: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="h-8 w-20 text-center"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top text-right font-bold text-primary">
+                            {row.customFields?.["shellArea"] !== undefined
+                              ? parseFloat(
+                                  String(row.customFields["shellArea"]),
+                                ).toFixed(3)
+                              : "0.000"}
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.customFields?.["dishFactor"] ?? "1.27"}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "dishFactor",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="0.01"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.customFields?.["dishEndNos"] ?? "0"}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "dishEndNos",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="1"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top text-right font-bold text-primary">
+                            {row.customFields?.["dishArea"] !== undefined
+                              ? parseFloat(
+                                  String(row.customFields["dishArea"]),
+                                ).toFixed(3)
+                              : "0.000"}
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.customFields?.["otherArea"] ?? "0"}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "otherArea",
+                                  e.target.value,
+                                )
+                              }
+                              className="h-8 w-20 text-center"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top text-right font-black text-primary">
+                            {row.customFields?.["totalArea"] !== undefined
+                              ? parseFloat(
+                                  String(row.customFields["totalArea"]),
+                                ).toFixed(3)
+                              : (row.totalWeight || 0).toFixed(3)}
+                          </td>
+                          {breakupKeys.map((key) => {
+                            const [itemIdStr] = key.split("-");
+                            const status = row.breakupStatus[key];
+                            const isLocked = !!status?.done;
+                            const completedQty = status?.completedQty || 0;
+                            const isPart =
+                              completedQty > 0 && completedQty < row.qty;
+
+                            // Get item description for this milestone to check group rules
+                            const milestoneItemDesc =
+                              headerGroups.find((hg) => hg.itemId === itemIdStr)
+                                ?.description || "";
+                            const isDisabledByGroup = isMilestoneDisabled(
+                              row,
+                              milestoneItemDesc,
+                            );
+                            return (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center"
+                              >
+                                <div className="flex flex-col items-center gap-1">
+                                  {isLocked || isRowLocked ? (
+                                    <div
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      title="Locked"
+                                    >
+                                      <Lock className="h-4 w-4" />
+                                    </div>
+                                  ) : (
+                                    <Input
+                                      type="text"
+                                      value={
+                                        row.breakupStatus[key]?.inputValue || ""
+                                      }
+                                      onChange={(e) =>
+                                        handleInlineQtyUpdate(
+                                          row.id,
+                                          key,
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="h-8 w-16 text-center border-input"
+                                      disabled={isDisabledByGroup}
+                                      placeholder=""
+                                      title={
+                                        isDisabledByGroup
+                                          ? "Disabled by group rule"
+                                          : "Any input = total qty for billing"
+                                      }
+                                    />
+                                  )}
+                                </div>
+                              </td>
+                            );
+                          })}
+                          <td className="p-3 align-top text-right">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyRow(row.id)}
+                                title="Copy row"
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => duplicateRow(row.id)}
+                                title="Duplicate row"
+                                disabled={isRowLocked}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteRow(row.id)}
+                                className="text-destructive hover:text-destructive"
+                                disabled={isRowLocked}
+                                title={
+                                  isRowLocked
+                                    ? "Cannot delete locked row"
+                                    : "Delete row"
+                                }
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
+                    if (item?.department === "Piping Insulation") {
+                      return (
+                        <tr
+                          key={row.id}
+                          className="border-b last:border-b-0 hover:bg-muted/30"
+                        >
+                          <td className="p-3 align-top">{index + 1}</td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["location"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "location",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["drawingNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "drawingNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["sheetNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "sheetNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["moc"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "moc",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["lineSize"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "lineSize",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["pipeOD"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "pipeOD",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={
+                                row.customFields?.["insulationThickness"] ?? ""
+                              }
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "insulationThickness",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(
+                                row.customFields?.["insulationType"] || "",
+                              )}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "insulationType",
+                                  value,
+                                )
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                <SelectValue placeholder="" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {INSULATION_TYPE_OPTIONS.map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["temp"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "temp",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.length ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  length: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyElbow90"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyElbow90",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyElbow45"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyElbow45",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyTee"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyTee",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyReducer"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyReducer",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyEndCap"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyEndCap",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyFlangeRem"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyFlangeRem",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyValveRem"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyValveRem",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyFlangeFix"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyFlangeFix",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["qtyValveFix"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyValveFix",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={
+                                row.customFields?.["qtyWeldValveFix"] || ""
+                              }
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "qtyWeldValveFix",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={
+                                row.customFields?.["totalFittingsLength"] !==
+                                undefined
+                                  ? row.customFields["totalFittingsLength"]
+                                  : ""
+                              }
+                              className="h-8 w-16 text-right"
+                              readOnly
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={
+                                row.customFields?.["rmt"] !== undefined
+                                  ? row.customFields["rmt"]
+                                  : ""
+                              }
+                              className="h-8 w-16 text-right"
+                              readOnly
+                            />
+                          </td>
+                          <td className="p-3 align-top text-right font-semibold">
+                            {row.customFields?.["area"] !== undefined
+                              ? row.customFields["area"]
+                              : row.totalWeight.toFixed(3)}
+                          </td>
+                          {breakupKeys.map((key) => {
+                            const [itemIdStr] = key.split("-");
+                            const status = row.breakupStatus[key];
+                            const isLocked = !!status?.done;
+                            const completedQty = status?.completedQty || 0;
+                            const isPart =
+                              completedQty > 0 && completedQty < row.qty;
+
+                            // Get item description for this milestone to check group rules
+                            const milestoneItemDesc =
+                              headerGroups.find((hg) => hg.itemId === itemIdStr)
+                                ?.description || "";
+                            const isDisabledByGroup = isMilestoneDisabled(
+                              row,
+                              milestoneItemDesc,
+                            );
+                            return (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center"
+                              >
+                                <div className="flex flex-col items-center gap-1">
+                                  {isLocked || isRowLocked ? (
+                                    <div
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      title="Locked"
+                                    >
+                                      <Lock className="h-4 w-4" />
+                                    </div>
+                                  ) : (
+                                    <Input
+                                      type="text"
+                                      value={
+                                        row.breakupStatus[key]?.inputValue || ""
+                                      }
+                                      onChange={(e) =>
+                                        handleInlineQtyUpdate(
+                                          row.id,
+                                          key,
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="h-8 w-16 text-center border-input"
+                                      disabled={isDisabledByGroup}
+                                      placeholder=""
+                                      title={
+                                        isDisabledByGroup
+                                          ? "Disabled by group rule"
+                                          : "Any input = total qty for billing"
+                                      }
+                                    />
+                                  )}
+                                </div>
+                              </td>
+                            );
+                          })}
+                          <td className="p-3 align-top text-right">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyRow(row.id)}
+                                title="Copy row"
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => duplicateRow(row.id)}
+                                title="Duplicate row"
+                                disabled={isRowLocked}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteRow(row.id)}
+                                className="text-destructive hover:text-destructive"
+                                disabled={isRowLocked}
+                                title={
+                                  isRowLocked
+                                    ? "Cannot delete locked row"
+                                    : "Delete row"
+                                }
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
+                    if (item?.department === "Structure") {
+                      return (
+                        <tr
+                          key={row.id}
+                          className="border-b last:border-b-0 hover:bg-muted/30"
+                        >
+                          <td className="p-3 align-top">{index + 1}</td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.type || ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  type: e.target.value,
+                                })
+                              }
+                              placeholder="Description"
+                              className="h-8 w-48"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["structureType"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "structureType",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Type"
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["mark"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "mark",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Mark No."
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.unit ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  unit: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="h-8 w-24 text-center"
+                              step="0.001"
+                              disabled={isRowLocked}
+                              placeholder="Unit Wt"
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.length ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  length: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="h-8 w-24 text-center"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.width ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  width: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="h-8 w-24 text-center"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.thickness ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  thickness: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="h-8 w-24 text-center"
+                              step="0.001"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              type="number"
+                              value={row.qty ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  qty: Number(e.target.value) || 0,
+                                })
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              step="1"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top text-right font-semibold">
+                            {row.totalWeight.toFixed(3)}
+                          </td>
+                          {breakupKeys.map((key) => {
+                            const [itemIdStr, percentageStr, ...nameParts] =
+                              key.split("-");
+                            const legacyKey = `${percentageStr}%-${nameParts.join("-")}`;
+                            const status =
+                              row.breakupStatus[key] ||
+                              row.breakupStatus[legacyKey];
+                            const isLocked = !!status?.done;
+                            const completedQty = status?.completedQty || 0;
+                            const isPart =
+                              completedQty > 0 && completedQty < row.qty;
+
+                            // Get item description for this milestone to check group rules
+                            const milestoneItemDesc =
+                              headerGroups.find((hg) => hg.itemId === itemIdStr)
+                                ?.description || "";
+                            const isDisabledByGroup = isMilestoneDisabled(
+                              row,
+                              milestoneItemDesc,
+                            );
+                            return (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center"
+                              >
+                                <div className="flex flex-col items-center gap-1">
+                                  {isLocked || isRowLocked ? (
+                                    <div
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      title="Locked"
+                                    >
+                                      <Lock className="h-4 w-4" />
+                                    </div>
+                                  ) : (
+                                    <Input
+                                      type="text"
+                                      value={
+                                        row.breakupStatus[key]?.inputValue || ""
+                                      }
+                                      onChange={(e) =>
+                                        handleInlineQtyUpdate(
+                                          row.id,
+                                          key,
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="h-8 w-16 text-center border-input"
+                                      disabled={isDisabledByGroup}
+                                      placeholder=""
+                                      title={
+                                        isDisabledByGroup
+                                          ? "Disabled by group rule"
+                                          : "Any input = total qty for billing"
+                                      }
+                                    />
+                                  )}
+                                </div>
+                              </td>
+                            );
+                          })}
+                          {customColumns.map((column) => (
+                            <td key={column.id} className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.[column.id] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateCustomField(
+                                    row.id,
+                                    column.id,
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 text-center"
+                                disabled={isRowLocked}
+                              />
+                            </td>
+                          ))}
+                          <td className="p-3 align-top text-right">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyRow(row.id)}
+                                title="Copy row"
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => duplicateRow(row.id)}
+                                title="Duplicate row"
+                                disabled={isRowLocked}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteRow(row.id)}
+                                className="text-destructive hover:text-destructive"
+                                disabled={isRowLocked}
+                                title={
+                                  isRowLocked
+                                    ? "Cannot delete locked row"
+                                    : "Delete row"
+                                }
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
+                    if (item?.department === "Piping-Spool Status") {
+                      return (
+                        <tr
+                          key={row.id}
+                          className="border-b last:border-b-0 hover:bg-muted/30"
+                        >
+                          <td className="p-3 align-top">{index + 1}</td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.area || ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  area: e.target.value,
+                                })
+                              }
+                              placeholder="Area"
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["drawingNo"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "drawingNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["revNo"] ?? ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "revNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["sheetNo"] ?? ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "sheetNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["spoolNo"] ?? ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "spoolNo",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(
+                                row.customFields?.["lineSize"] || "",
+                              )}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "lineSize",
+                                  value,
+                                )
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16">
+                                <SelectValue placeholder="" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {LINE_SIZE_OPTIONS.map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    DN{option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Select
+                              value={String(
+                                row.customFields?.["baseMaterial"] || "",
+                              )}
+                              onValueChange={(value) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "baseMaterial",
+                                  value,
+                                )
+                              }
+                              disabled={isRowLocked}
+                            >
+                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                <SelectValue placeholder="" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {MOC_OPTIONS.map((option) => (
+                                  <SelectItem key={option} value={option}>
+                                    {option}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.length ?? ""}
+                              onChange={(e) =>
+                                handleUpdateRow(row.id, {
+                                  length: e.target.value as any,
+                                })
+                              }
+                              onBlur={(e) => {
+                                const evaluated = evaluateExpression(
+                                  e.target.value,
+                                );
+                                if (evaluated !== null) {
+                                  handleUpdateRow(row.id, {
+                                    length: evaluated,
+                                  });
+                                }
+                              }}
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              placeholder="e.g. 2+2"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["inchMeter"] || ""}
+                              className="h-8 w-16 bg-muted"
+                              disabled
+                              title="Auto-calculated: Length × Line Size"
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["surfaceArea"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "surfaceArea",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["paintSystem"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "paintSystem",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          <td className="p-3 align-top">
+                            <Input
+                              value={row.customFields?.["remarks"] || ""}
+                              onChange={(e) =>
+                                handleUpdateCustomField(
+                                  row.id,
+                                  "remarks",
+                                  e.target.value,
+                                )
+                              }
+                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
+                              disabled={isRowLocked}
+                            />
+                          </td>
+                          {breakupKeys.map((key) => {
+                            const [itemIdStr] = key.split("-");
+                            const status = row.breakupStatus[key];
+                            const isLocked = !!status?.done;
+                            const completedQty = status?.completedQty || 0;
+                            // For Piping-Spool Status, use InchMeter as the quantity for billing
+                            const totalQty =
+                              item?.department === "Piping-Spool Status"
+                                ? parseFloat(
+                                    String(
+                                      row.customFields?.["inchMeter"] || "0",
+                                    ),
+                                  )
+                                : row.qty;
+                            const isPart =
+                              completedQty > 0 && completedQty < totalQty;
+
+                            // Get item description for this milestone to check group rules
+                            const milestoneItemDesc =
+                              headerGroups.find((hg) => hg.itemId === itemIdStr)
+                                ?.description || "";
+                            const isDisabledByGroup = isMilestoneDisabled(
+                              row,
+                              milestoneItemDesc,
+                            );
+                            return (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center"
+                              >
+                                <div className="flex flex-col items-center gap-1">
+                                  {isLocked || isRowLocked ? (
+                                    <div
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      title="Locked"
+                                    >
+                                      <Lock className="h-4 w-4" />
+                                    </div>
+                                  ) : (
+                                    <Input
+                                      type="text"
+                                      value={
+                                        row.breakupStatus[key]?.inputValue || ""
+                                      }
+                                      onChange={(e) =>
+                                        handleInlineQtyUpdate(
+                                          row.id,
+                                          key,
+                                          e.target.value,
+                                        )
+                                      }
+                                      className="h-8 w-16 text-center border-input"
+                                      disabled={isDisabledByGroup}
+                                      placeholder=""
+                                      title={
+                                        isDisabledByGroup
+                                          ? "Disabled by group rule"
+                                          : "Any input = total qty for billing"
+                                      }
+                                    />
+                                  )}
+                                </div>
+                              </td>
+                            );
+                          })}
+                          <td className="p-3 align-top text-right">
+                            <div className="flex items-center justify-end gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => copyRow(row.id)}
+                                title="Copy row"
+                              >
+                                <Copy className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => duplicateRow(row.id)}
+                                title="Duplicate row"
+                                disabled={isRowLocked}
+                              >
+                                <Plus className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteRow(row.id)}
+                                className="text-destructive hover:text-destructive"
+                                disabled={isRowLocked}
+                                title={
+                                  isRowLocked
+                                    ? "Cannot delete locked row"
+                                    : "Delete row"
+                                }
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
                     return (
                       <tr
                         key={row.id}
                         className="border-b last:border-b-0 hover:bg-muted/30"
                       >
                         <td className="p-3 align-top">{index + 1}</td>
+                        <td className="p-3 align-top space-y-2">
+                          <Input
+                            value={row.type}
+                            onChange={(e) =>
+                              handleUpdateRow(row.id, {
+                                type: e.target.value,
+                              })
+                            }
+                            className="h-8"
+                            disabled={isRowLocked}
+                          />
+                        </td>
                         <td className="p-3 align-top">
                           <Input
                             value={row.area || ""}
@@ -4252,461 +6135,12 @@ export default function MeasurementSheet() {
                                 area: e.target.value,
                               })
                             }
-                            placeholder="Area"
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                            placeholder="Area label"
+                            className="h-8"
                             disabled={isRowLocked}
                           />
                         </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["docNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "docNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["lineNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "lineNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["sheetNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "sheetNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["rev"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "rev",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(row.customFields?.["moc"] || "")}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(row.id, "moc", value)
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16">
-                              <SelectValue placeholder="" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {MOC_OPTIONS.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["fjSj"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "fjSj",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["jointNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "jointNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["spoolNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "spoolNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.width ?? ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                width: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="0.001"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.thickness ?? ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                thickness: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="0.001"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["schedule"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "schedule",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["jointType"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "jointType",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.type}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                type: e.target.value,
-                              })
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["componentPart2"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "componentPart2",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top text-right font-semibold">
-                          {row.totalWeight.toFixed(3)}
-                        </td>
-                        {breakupKeys.map((key) => {
-                          const [itemIdStr, percentageStr, ...nameParts] =
-                            key.split("-");
-                          const isLegacy =
-                            !key.includes(row.itemId) &&
-                            !itemIdStr.startsWith(row.itemId); // Simple check
 
-                          // If column itemId doesn't match row itemId, show N/A
-                          // However, we must reconstruct column object from key or lookup
-                          // Wait, breakupKeys is strings.
-                          // Better to use breakupColumns directly in map?
-
-                          // No, the map above uses breakupKeys which was derived from breakupColumns.
-                          // But we need to know if THIS column key belongs to THIS row.
-                          // The key format is itemId-percentage-name.
-
-                          // Try to find status with new key, then fallback to legacy
-                          const legacyKey = `${percentageStr}%-${nameParts.join("-")}`;
-                          const status =
-                            row.breakupStatus[key] ||
-                            row.breakupStatus[legacyKey];
-                          const isLocked = !!status?.done;
-                          const completedQty = status?.completedQty || 0;
-                          const isPart =
-                            completedQty > 0 && completedQty < row.qty;
-
-                          // Get item description for this milestone to check group rules
-                          const milestoneItemDesc =
-                            headerGroups.find((hg) => hg.itemId === itemIdStr)
-                              ?.description || "";
-                          const isDisabledByGroup = isMilestoneDisabled(
-                            row,
-                            milestoneItemDesc,
-                          );
-                          return (
-                            <td key={key} className="p-3 align-top text-center">
-                              <div className="flex flex-col items-center gap-1">
-                                {isLocked || isRowLocked ? (
-                                  <div
-                                    className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
-                                    title="Locked"
-                                  >
-                                    <Lock className="h-4 w-4" />
-                                  </div>
-                                ) : (
-                                  <Input
-                                    type="text"
-                                    value={
-                                      row.breakupStatus[key]?.inputValue || ""
-                                    }
-                                    onChange={(e) =>
-                                      handleInlineQtyUpdate(
-                                        row.id,
-                                        key,
-                                        e.target.value,
-                                      )
-                                    }
-                                    className="h-8 w-16 text-center border-input"
-                                    disabled={isDisabledByGroup}
-                                    placeholder=""
-                                    title={
-                                      isDisabledByGroup
-                                        ? "Disabled by group rule"
-                                        : "Any input = total qty for billing"
-                                    }
-                                  />
-                                )}
-                              </div>
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  }
-                  if (item?.department === "Equipment Insulation") {
-                    return (
-                      <tr
-                        key={row.id}
-                        className="border-b last:border-b-0 hover:bg-muted/30"
-                      >
-                        <td className="p-3 align-top">{index + 1}</td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["equipmentNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "equipmentNo",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="Tag No."
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["equipmentName"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "equipmentName",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="Name/Type"
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(row.customFields?.["portion"] || "")}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(row.id, "portion", value)
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                              <SelectValue placeholder="Select" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {EQUIPMENT_PORTION_OPTIONS.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(row.customFields?.["position"] || "")}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(row.id, "position", value)
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                              <SelectValue placeholder="Select" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {EQUIPMENT_POSITION_OPTIONS.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.customFields?.["temp"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "temp",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="1"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(row.customFields?.["moc"] || "")}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(row.id, "moc", value)
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="h-8 w-20">
-                              <SelectValue placeholder="" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {EQUIPMENT_MOC_OPTIONS.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(
-                              row.customFields?.["insulationType"] || "",
-                            )}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "insulationType",
-                                value,
-                              )
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                              <SelectValue placeholder="" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {EQUIPMENT_INSULATION_TYPE_OPTIONS.map(
-                                (option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ),
-                              )}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.customFields?.["thickness"] ?? ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "thickness",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="1"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.customFields?.["insulatedDia"] ?? ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "insulatedDia",
-                                e.target.value,
-                              )
-                            }
-                            className="h-8 w-20 text-center"
-                            step="0.001"
-                            disabled={isRowLocked}
-                          />
-                        </td>
                         <td className="p-3 align-top">
                           <Input
                             type="number"
@@ -4716,669 +6150,7 @@ export default function MeasurementSheet() {
                                 length: Number(e.target.value) || 0,
                               })
                             }
-                            className="h-8 w-20 text-center"
-                            step="0.001"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top text-right font-bold text-primary">
-                          {row.customFields?.["shellArea"] !== undefined
-                            ? parseFloat(
-                                String(row.customFields["shellArea"]),
-                              ).toFixed(3)
-                            : "0.000"}
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.customFields?.["dishFactor"] ?? "1.27"}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "dishFactor",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="0.01"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.customFields?.["dishEndNos"] ?? "0"}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "dishEndNos",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="1"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top text-right font-bold text-primary">
-                          {row.customFields?.["dishArea"] !== undefined
-                            ? parseFloat(
-                                String(row.customFields["dishArea"]),
-                              ).toFixed(3)
-                            : "0.000"}
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.customFields?.["otherArea"] ?? "0"}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "otherArea",
-                                e.target.value,
-                              )
-                            }
-                            className="h-8 w-20 text-center"
-                            step="0.001"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top text-right font-black text-primary">
-                          {row.customFields?.["totalArea"] !== undefined
-                            ? parseFloat(
-                                String(row.customFields["totalArea"]),
-                              ).toFixed(3)
-                            : (row.totalWeight || 0).toFixed(3)}
-                        </td>
-                        {breakupKeys.map((key) => {
-                          const [itemIdStr] = key.split("-");
-                          const status = row.breakupStatus[key];
-                          const isLocked = !!status?.done;
-                          const completedQty = status?.completedQty || 0;
-                          const isPart =
-                            completedQty > 0 && completedQty < row.qty;
-
-                          // Get item description for this milestone to check group rules
-                          const milestoneItemDesc =
-                            headerGroups.find((hg) => hg.itemId === itemIdStr)
-                              ?.description || "";
-                          const isDisabledByGroup = isMilestoneDisabled(
-                            row,
-                            milestoneItemDesc,
-                          );
-                          return (
-                            <td key={key} className="p-3 align-top text-center">
-                              <div className="flex flex-col items-center gap-1">
-                                {isLocked || isRowLocked ? (
-                                  <div
-                                    className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
-                                    title="Locked"
-                                  >
-                                    <Lock className="h-4 w-4" />
-                                  </div>
-                                ) : (
-                                  <Input
-                                    type="text"
-                                    value={
-                                      row.breakupStatus[key]?.inputValue || ""
-                                    }
-                                    onChange={(e) =>
-                                      handleInlineQtyUpdate(
-                                        row.id,
-                                        key,
-                                        e.target.value,
-                                      )
-                                    }
-                                    className="h-8 w-16 text-center border-input"
-                                    disabled={isDisabledByGroup}
-                                    placeholder=""
-                                    title={
-                                      isDisabledByGroup
-                                        ? "Disabled by group rule"
-                                        : "Any input = total qty for billing"
-                                    }
-                                  />
-                                )}
-                              </div>
-                            </td>
-                          );
-                        })}
-                        <td className="p-3 align-top text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => copyRow(row.id)}
-                              title="Copy row"
-                            >
-                              <Copy className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => duplicateRow(row.id)}
-                              title="Duplicate row"
-                              disabled={isRowLocked}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteRow(row.id)}
-                              className="text-destructive hover:text-destructive"
-                              disabled={isRowLocked}
-                              title={
-                                isRowLocked
-                                  ? "Cannot delete locked row"
-                                  : "Delete row"
-                              }
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  }
-                  if (item?.department === "Piping Insulation") {
-                    return (
-                      <tr
-                        key={row.id}
-                        className="border-b last:border-b-0 hover:bg-muted/30"
-                      >
-                        <td className="p-3 align-top">{index + 1}</td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["location"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "location",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["drawingNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "drawingNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["sheetNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "sheetNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["moc"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "moc",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["lineSize"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "lineSize",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["pipeOD"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "pipeOD",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={
-                              row.customFields?.["insulationThickness"] ?? ""
-                            }
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "insulationThickness",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="0.001"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(
-                              row.customFields?.["insulationType"] || "",
-                            )}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "insulationType",
-                                value,
-                              )
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                              <SelectValue placeholder="" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {INSULATION_TYPE_OPTIONS.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["temp"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "temp",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.length ?? ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                length: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="0.001"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyElbow90"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyElbow90",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyElbow45"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyElbow45",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyTee"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyTee",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyReducer"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyReducer",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyEndCap"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyEndCap",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyFlangeRem"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyFlangeRem",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyValveRem"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyValveRem",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyFlangeFix"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyFlangeFix",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyValveFix"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyValveFix",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["qtyWeldValveFix"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "qtyWeldValveFix",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={
-                              row.customFields?.["totalFittingsLength"] !==
-                              undefined
-                                ? row.customFields["totalFittingsLength"]
-                                : ""
-                            }
-                            className="h-8 w-16 text-right"
-                            readOnly
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={
-                              row.customFields?.["rmt"] !== undefined
-                                ? row.customFields["rmt"]
-                                : ""
-                            }
-                            className="h-8 w-16 text-right"
-                            readOnly
-                          />
-                        </td>
-                        <td className="p-3 align-top text-right font-semibold">
-                          {row.customFields?.["area"] !== undefined
-                            ? row.customFields["area"]
-                            : row.totalWeight.toFixed(3)}
-                        </td>
-                        {breakupKeys.map((key) => {
-                          const [itemIdStr] = key.split("-");
-                          const status = row.breakupStatus[key];
-                          const isLocked = !!status?.done;
-                          const completedQty = status?.completedQty || 0;
-                          const isPart =
-                            completedQty > 0 && completedQty < row.qty;
-
-                          // Get item description for this milestone to check group rules
-                          const milestoneItemDesc =
-                            headerGroups.find((hg) => hg.itemId === itemIdStr)
-                              ?.description || "";
-                          const isDisabledByGroup = isMilestoneDisabled(
-                            row,
-                            milestoneItemDesc,
-                          );
-                          return (
-                            <td key={key} className="p-3 align-top text-center">
-                              <div className="flex flex-col items-center gap-1">
-                                {isLocked || isRowLocked ? (
-                                  <div
-                                    className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
-                                    title="Locked"
-                                  >
-                                    <Lock className="h-4 w-4" />
-                                  </div>
-                                ) : (
-                                  <Input
-                                    type="text"
-                                    value={
-                                      row.breakupStatus[key]?.inputValue || ""
-                                    }
-                                    onChange={(e) =>
-                                      handleInlineQtyUpdate(
-                                        row.id,
-                                        key,
-                                        e.target.value,
-                                      )
-                                    }
-                                    className="h-8 w-16 text-center border-input"
-                                    disabled={isDisabledByGroup}
-                                    placeholder=""
-                                    title={
-                                      isDisabledByGroup
-                                        ? "Disabled by group rule"
-                                        : "Any input = total qty for billing"
-                                    }
-                                  />
-                                )}
-                              </div>
-                            </td>
-                          );
-                        })}
-                        <td className="p-3 align-top text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => copyRow(row.id)}
-                              title="Copy row"
-                            >
-                              <Copy className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => duplicateRow(row.id)}
-                              title="Duplicate row"
-                              disabled={isRowLocked}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteRow(row.id)}
-                              className="text-destructive hover:text-destructive"
-                              disabled={isRowLocked}
-                              title={
-                                isRowLocked
-                                  ? "Cannot delete locked row"
-                                  : "Delete row"
-                              }
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  }
-                  if (item?.department === "Structure") {
-                    return (
-                      <tr
-                        key={row.id}
-                        className="border-b last:border-b-0 hover:bg-muted/30"
-                      >
-                        <td className="p-3 align-top">{index + 1}</td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.type || ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                type: e.target.value,
-                              })
-                            }
-                            placeholder="Description"
-                            className="h-8 w-48"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["structureType"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "structureType",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="Type"
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["mark"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "mark",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="Mark No."
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.unit ?? ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                unit: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="h-8 w-24 text-center"
-                            step="0.001"
-                            disabled={isRowLocked}
-                            placeholder="Unit Wt"
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.length ?? ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                length: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="h-8 w-24 text-center"
+                            className="h-8 text-center"
                             step="0.001"
                             disabled={isRowLocked}
                           />
@@ -5392,7 +6164,7 @@ export default function MeasurementSheet() {
                                 width: Number(e.target.value) || 0,
                               })
                             }
-                            className="h-8 w-24 text-center"
+                            className="h-8 text-center"
                             step="0.001"
                             disabled={isRowLocked}
                           />
@@ -5406,7 +6178,7 @@ export default function MeasurementSheet() {
                                 thickness: Number(e.target.value) || 0,
                               })
                             }
-                            className="h-8 w-24 text-center"
+                            className="h-8 text-center"
                             step="0.001"
                             disabled={isRowLocked}
                           />
@@ -5420,8 +6192,8 @@ export default function MeasurementSheet() {
                                 qty: Number(e.target.value) || 0,
                               })
                             }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            step="1"
+                            className="h-8 text-center"
+                            min={0}
                             disabled={isRowLocked}
                           />
                         </td>
@@ -5429,16 +6201,26 @@ export default function MeasurementSheet() {
                           {row.totalWeight.toFixed(3)}
                         </td>
                         {breakupKeys.map((key) => {
-                          const [itemIdStr, percentageStr, ...nameParts] =
-                            key.split("-");
-                          const legacyKey = `${percentageStr}%-${nameParts.join("-")}`;
-                          const status =
-                            row.breakupStatus[key] ||
-                            row.breakupStatus[legacyKey];
+                          const [itemIdStr] = key.split("-");
+                          if (itemIdStr !== row.itemId) {
+                            return (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center bg-muted/20"
+                              >
+                                <span className="text-xs text-muted-foreground/30">
+                                  -
+                                </span>
+                              </td>
+                            );
+                          }
+                          const status = row.breakupStatus[key];
                           const isLocked = !!status?.done;
                           const completedQty = status?.completedQty || 0;
                           const isPart =
                             completedQty > 0 && completedQty < row.qty;
+                          const breakupValue =
+                            row.customFields?.[`breakupValue_${key}`];
 
                           // Get item description for this milestone to check group rules
                           const milestoneItemDesc =
@@ -5450,38 +6232,36 @@ export default function MeasurementSheet() {
                           );
                           return (
                             <td key={key} className="p-3 align-top text-center">
-                              <div className="flex flex-col items-center gap-1">
-                                {isLocked || isRowLocked ? (
-                                  <div
-                                    className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
-                                    title="Locked"
-                                  >
-                                    <Lock className="h-4 w-4" />
-                                  </div>
-                                ) : (
-                                  <Input
-                                    type="text"
-                                    value={
-                                      row.breakupStatus[key]?.inputValue || ""
-                                    }
-                                    onChange={(e) =>
-                                      handleInlineQtyUpdate(
-                                        row.id,
-                                        key,
-                                        e.target.value,
-                                      )
-                                    }
-                                    className="h-8 w-16 text-center border-input"
-                                    disabled={isDisabledByGroup}
-                                    placeholder=""
-                                    title={
-                                      isDisabledByGroup
-                                        ? "Disabled by group rule"
-                                        : "Any input = total qty for billing"
-                                    }
-                                  />
-                                )}
-                              </div>
+                              {isLocked || isRowLocked ? (
+                                <div
+                                  className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground mx-auto"
+                                  title="Locked"
+                                >
+                                  <Lock className="h-4 w-4" />
+                                </div>
+                              ) : (
+                                <Input
+                                  type="text"
+                                  value={
+                                    row.breakupStatus[key]?.inputValue || ""
+                                  }
+                                  onChange={(e) =>
+                                    handleInlineQtyUpdate(
+                                      row.id,
+                                      key,
+                                      e.target.value,
+                                    )
+                                  }
+                                  className="h-8 w-16 text-center border-input mx-auto"
+                                  disabled={isDisabledByGroup}
+                                  placeholder=""
+                                  title={
+                                    isDisabledByGroup
+                                      ? "Disabled by group rule"
+                                      : "Any input = total qty for billing"
+                                  }
+                                />
+                              )}
                             </td>
                           );
                         })}
@@ -5538,518 +6318,1204 @@ export default function MeasurementSheet() {
                         </td>
                       </tr>
                     );
-                  }
-                  if (item?.department === "Piping-Spool Status") {
-                    return (
-                      <tr
-                        key={row.id}
-                        className="border-b last:border-b-0 hover:bg-muted/30"
-                      >
-                        <td className="p-3 align-top">{index + 1}</td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.area || ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                area: e.target.value,
-                              })
-                            }
-                            placeholder="Area"
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["drawingNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "drawingNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["revNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "revNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["sheetNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "sheetNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["spoolNo"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "spoolNo",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(row.customFields?.["lineSize"] || "")}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(row.id, "lineSize", value)
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16">
-                              <SelectValue placeholder="" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {LINE_SIZE_OPTIONS.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  DN{option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Select
-                            value={String(
-                              row.customFields?.["baseMaterial"] || "",
-                            )}
-                            onValueChange={(value) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "baseMaterial",
-                                value,
-                              )
-                            }
-                            disabled={isRowLocked}
-                          >
-                            <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                              <SelectValue placeholder="" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {MOC_OPTIONS.map((option) => (
-                                <SelectItem key={option} value={option}>
-                                  {option}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.length ?? ""}
-                            onChange={(e) =>
-                              handleUpdateRow(row.id, {
-                                length: e.target.value as any,
-                              })
-                            }
-                            onBlur={(e) => {
-                              const evaluated = evaluateExpression(
-                                e.target.value,
-                              );
-                              if (evaluated !== null) {
-                                handleUpdateRow(row.id, {
-                                  length: evaluated,
-                                });
-                              }
-                            }}
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            placeholder="e.g. 2+2"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["inchMeter"] || ""}
-                            className="h-8 w-16 bg-muted"
-                            disabled
-                            title="Auto-calculated: Length × Line Size"
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["surfaceArea"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "surfaceArea",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["paintSystem"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "paintSystem",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.["remarks"] || ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                "remarks",
-                                e.target.value,
-                              )
-                            }
-                            className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                        {breakupKeys.map((key) => {
-                          const [itemIdStr] = key.split("-");
-                          const status = row.breakupStatus[key];
-                          const isLocked = !!status?.done;
-                          const completedQty = status?.completedQty || 0;
-                          // For Piping-Spool Status, use InchMeter as the quantity for billing
-                          const totalQty =
-                            item?.department === "Piping-Spool Status"
-                              ? parseFloat(
-                                  String(
-                                    row.customFields?.["inchMeter"] || "0",
-                                  ),
-                                )
-                              : row.qty;
-                          const isPart =
-                            completedQty > 0 && completedQty < totalQty;
+                  })}
 
-                          // Get item description for this milestone to check group rules
-                          const milestoneItemDesc =
-                            headerGroups.find((hg) => hg.itemId === itemIdStr)
-                              ?.description || "";
-                          const isDisabledByGroup = isMilestoneDisabled(
-                            row,
-                            milestoneItemDesc,
-                          );
-                          return (
-                            <td key={key} className="p-3 align-top text-center">
-                              <div className="flex flex-col items-center gap-1">
-                                {isLocked || isRowLocked ? (
-                                  <div
-                                    className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
-                                    title="Locked"
-                                  >
-                                    <Lock className="h-4 w-4" />
-                                  </div>
-                                ) : (
-                                  <Input
-                                    type="text"
-                                    value={
-                                      row.breakupStatus[key]?.inputValue || ""
-                                    }
-                                    onChange={(e) =>
-                                      handleInlineQtyUpdate(
-                                        row.id,
-                                        key,
-                                        e.target.value,
-                                      )
-                                    }
-                                    className="h-8 w-16 text-center border-input"
-                                    disabled={isDisabledByGroup}
-                                    placeholder=""
-                                    title={
-                                      isDisabledByGroup
-                                        ? "Disabled by group rule"
-                                        : "Any input = total qty for billing"
-                                    }
-                                  />
-                                )}
-                              </div>
-                            </td>
-                          );
-                        })}
-                        <td className="p-3 align-top text-right">
-                          <div className="flex items-center justify-end gap-1">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => copyRow(row.id)}
-                              title="Copy row"
-                            >
-                              <Copy className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => duplicateRow(row.id)}
-                              title="Duplicate row"
-                              disabled={isRowLocked}
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleDeleteRow(row.id)}
-                              className="text-destructive hover:text-destructive"
-                              disabled={isRowLocked}
-                              title={
-                                isRowLocked
-                                  ? "Cannot delete locked row"
-                                  : "Delete row"
-                              }
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  }
-                  return (
-                    <tr
-                      key={row.id}
-                      className="border-b last:border-b-0 hover:bg-muted/30"
-                    >
-                      <td className="p-3 align-top">{index + 1}</td>
-                      <td className="p-3 align-top space-y-2">
-                        <Input
-                          value={row.type}
-                          onChange={(e) =>
-                            handleUpdateRow(row.id, {
-                              type: e.target.value,
-                            })
-                          }
-                          className="h-8"
-                          disabled={isRowLocked}
-                        />
-                      </td>
-                      <td className="p-3 align-top">
-                        <Input
-                          value={row.area || ""}
-                          onChange={(e) =>
-                            handleUpdateRow(row.id, {
-                              area: e.target.value,
-                            })
-                          }
-                          placeholder="Area label"
-                          className="h-8"
-                          disabled={isRowLocked}
-                        />
-                      </td>
-
-                      <td className="p-3 align-top">
-                        <Input
-                          type="number"
-                          value={row.length ?? ""}
-                          onChange={(e) =>
-                            handleUpdateRow(row.id, {
-                              length: Number(e.target.value) || 0,
-                            })
-                          }
-                          className="h-8 text-center"
-                          step="0.001"
-                          disabled={isRowLocked}
-                        />
-                      </td>
-                      <td className="p-3 align-top">
-                        <Input
-                          type="number"
-                          value={row.width ?? ""}
-                          onChange={(e) =>
-                            handleUpdateRow(row.id, {
-                              width: Number(e.target.value) || 0,
-                            })
-                          }
-                          className="h-8 text-center"
-                          step="0.001"
-                          disabled={isRowLocked}
-                        />
-                      </td>
-                      <td className="p-3 align-top">
-                        <Input
-                          type="number"
-                          value={row.thickness ?? ""}
-                          onChange={(e) =>
-                            handleUpdateRow(row.id, {
-                              thickness: Number(e.target.value) || 0,
-                            })
-                          }
-                          className="h-8 text-center"
-                          step="0.001"
-                          disabled={isRowLocked}
-                        />
-                      </td>
-                      <td className="p-3 align-top">
-                        <Input
-                          type="number"
-                          value={row.qty ?? ""}
-                          onChange={(e) =>
-                            handleUpdateRow(row.id, {
-                              qty: Number(e.target.value) || 0,
-                            })
-                          }
-                          className="h-8 text-center"
-                          min={0}
-                          disabled={isRowLocked}
-                        />
-                      </td>
-                      <td className="p-3 align-top text-right font-semibold">
-                        {row.totalWeight.toFixed(3)}
-                      </td>
-                      {breakupKeys.map((key) => {
-                        const [itemIdStr] = key.split("-");
-                        if (itemIdStr !== row.itemId) {
-                          return (
-                            <td
-                              key={key}
-                              className="p-3 align-top text-center bg-muted/20"
-                            >
-                              <span className="text-xs text-muted-foreground/30">
-                                -
-                              </span>
-                            </td>
-                          );
-                        }
-                        const status = row.breakupStatus[key];
-                        const isLocked = !!status?.done;
-                        const completedQty = status?.completedQty || 0;
-                        const isPart =
-                          completedQty > 0 && completedQty < row.qty;
-                        const breakupValue =
-                          row.customFields?.[`breakupValue_${key}`];
-
-                        // Get item description for this milestone to check group rules
-                        const milestoneItemDesc =
-                          headerGroups.find((hg) => hg.itemId === itemIdStr)
-                            ?.description || "";
-                        const isDisabledByGroup = isMilestoneDisabled(
-                          row,
-                          milestoneItemDesc,
-                        );
+                  {isAddingRows &&
+                    tempRows.map((row, index) => {
+                      if (item?.department === "Piping-LHS") {
                         return (
-                          <td key={key} className="p-3 align-top text-center">
-                            {isLocked || isRowLocked ? (
-                              <div
-                                className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground mx-auto"
-                                title="Locked"
-                              >
-                                <Lock className="h-4 w-4" />
-                              </div>
-                            ) : (
+                          <tr key={row.tempId} className="border-b bg-muted/40">
+                            <td className="p-3 align-top text-muted-foreground">
+                              {filteredRows.length + index + 1}
+                            </td>
+                            <td className="p-3 align-top">
                               <Input
-                                type="text"
-                                value={row.breakupStatus[key]?.inputValue || ""}
+                                value={row.area || ""}
                                 onChange={(e) =>
-                                  handleInlineQtyUpdate(
-                                    row.id,
-                                    key,
+                                  handleUpdateTempRow(row.tempId, {
+                                    area: e.target.value,
+                                  })
+                                }
+                                placeholder="Area"
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["docNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "docNo",
                                     e.target.value,
                                   )
                                 }
-                                className="h-8 w-16 text-center border-input mx-auto"
-                                disabled={isDisabledByGroup}
-                                placeholder=""
-                                title={
-                                  isDisabledByGroup
-                                    ? "Disabled by group rule"
-                                    : "Any input = total qty for billing"
-                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
-                            )}
-                          </td>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["lineNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "lineNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["sheetNo"] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "sheetNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["rev"] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "rev",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "moc",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["fjSj"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "fjSj",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["jointNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "jointNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["spoolNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "spoolNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.width || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    width: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.thickness || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    thickness: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["schedule"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "schedule",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["jointType"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "jointType",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.type || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    type: e.target.value,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={
+                                  row.customFields?.["componentPart2"] || ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "componentPart2",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right font-semibold">
+                              -
+                            </td>
+                          </tr>
                         );
-                      })}
-                      {customColumns.map((column) => (
-                        <td key={column.id} className="p-3 align-top">
-                          <Input
-                            value={row.customFields?.[column.id] ?? ""}
-                            onChange={(e) =>
-                              handleUpdateCustomField(
-                                row.id,
-                                column.id,
-                                e.target.value,
-                              )
-                            }
-                            className="h-8 text-center"
-                            disabled={isRowLocked}
-                          />
-                        </td>
-                      ))}
-                      <td className="p-3 align-top text-right">
-                        <div className="flex items-center justify-end gap-1">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => copyRow(row.id)}
-                            title="Copy row"
-                          >
-                            <Copy className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => duplicateRow(row.id)}
-                            title="Duplicate row"
-                            disabled={isRowLocked}
-                          >
-                            <Plus className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDeleteRow(row.id)}
-                            className="text-destructive hover:text-destructive"
-                            disabled={isRowLocked}
-                            title={
-                              isRowLocked
-                                ? "Cannot delete locked row"
-                                : "Delete row"
-                            }
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                      }
+                      if (item?.department === "Equipment Insulation") {
+                        return (
+                          <tr key={row.tempId} className="border-b bg-muted/40">
+                            <td className="p-3 align-top text-muted-foreground">
+                              {filteredRows.length + index + 1}
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["equipmentNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "equipmentNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={
+                                  row.customFields?.["equipmentName"] || ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "equipmentName",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(
+                                  row.customFields?.["portion"] || "",
+                                )}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "portion",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {EQUIPMENT_PORTION_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(
+                                  row.customFields?.["position"] || "",
+                                )}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "position",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                  <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {EQUIPMENT_POSITION_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.customFields?.["temp"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "temp",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20"
+                                step="0.1"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(row.customFields?.["moc"] || "")}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "moc",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {EQUIPMENT_MOC_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(
+                                  row.customFields?.["insulationType"] || "",
+                                )}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "insulationType",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {EQUIPMENT_INSULATION_TYPE_OPTIONS.map(
+                                    (option) => (
+                                      <SelectItem key={option} value={option}>
+                                        {option}
+                                      </SelectItem>
+                                    ),
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.customFields?.["thickness"] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "thickness",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.1"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.customFields?.["insulatedDia"] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "insulatedDia",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.length ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    length: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right font-semibold text-muted-foreground">
+                              {row.customFields?.["shellArea"] || "-"}
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.customFields?.["dishFactor"] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "dishFactor",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.customFields?.["dishEndNos"] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "dishEndNos",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20"
+                                step="1"
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right font-semibold text-muted-foreground">
+                              {row.customFields?.["dishArea"] || "-"}
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.customFields?.["otherArea"] ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "otherArea",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right font-semibold text-muted-foreground">
+                              {row.customFields?.["totalArea"] || "-"}
+                            </td>
+                            {breakupKeys.map((key) => (
+                              <td key={key} className="p-3 align-top"></td>
+                            ))}
+                            <td className="p-3 align-top text-right">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleCancelTempRows()}
+                                className="text-destructive hover:text-destructive"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </td>
+                          </tr>
+                        );
+                      } else if (item?.department === "Piping Insulation") {
+                        return (
+                          <tr key={row.tempId} className="border-b bg-muted/40">
+                            <td className="p-3 align-top text-muted-foreground">
+                              {filteredRows.length + index + 1}
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["location"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "location",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["drawingNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "drawingNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["sheetNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "sheetNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(row.customFields?.["moc"] || "")}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "moc",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="h-8 w-16">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {MOC_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(
+                                  row.customFields?.["lineSize"] || "",
+                                )}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "lineSize",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="h-8 w-16">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {LINE_SIZE_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      DN{option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.customFields?.["pipeOD"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "pipeOD",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={
+                                  row.customFields?.["insulationThickness"] ||
+                                  ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "insulationThickness",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(
+                                  row.customFields?.["insulationType"] || "",
+                                )}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "insulationType",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {INSULATION_TYPE_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["temp"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "temp",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.length || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    length: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyElbow90"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyElbow90",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyElbow45"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyElbow45",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyTee"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyTee",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyReducer"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyReducer",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyEndCap"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyEndCap",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyFlangeRem"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyFlangeRem",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyValveRem"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyValveRem",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyFlangeFix"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyFlangeFix",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["qtyValveFix"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyValveFix",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={
+                                  row.customFields?.["qtyWeldValveFix"] || ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "qtyWeldValveFix",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={
+                                  row.customFields?.["totalFittingsLength"] !==
+                                  undefined
+                                    ? row.customFields["totalFittingsLength"]
+                                    : ""
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-right w-16"
+                                readOnly
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={
+                                  row.customFields?.["rmt"] !== undefined
+                                    ? row.customFields["rmt"]
+                                    : ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "rmt",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-right w-16"
+                                readOnly
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right font-semibold">
+                              <Input
+                                value={
+                                  row.customFields?.["area"] !== undefined
+                                    ? row.customFields["area"]
+                                    : ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "area",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-right w-20"
+                                readOnly
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right">-</td>
+                          </tr>
+                        );
+                      }
+                      if (item?.department === "Structure") {
+                        return (
+                          <tr key={row.tempId} className="border-b bg-muted/40">
+                            <td className="p-3 align-top text-muted-foreground">
+                              {filteredRows.length + index + 1}
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.type || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    type: e.target.value,
+                                  })
+                                }
+                                placeholder="Description"
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-48"
+                              />
+                            </td>
 
-                {isAddingRows &&
-                  tempRows.map((row, index) => {
-                    if (item?.department === "Piping-LHS") {
+                            <td className="p-3 align-top">
+                              <Input
+                                value={
+                                  row.customFields?.["structureType"] || ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "structureType",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Type"
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["mark"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "mark",
+                                    e.target.value,
+                                  )
+                                }
+                                placeholder="Mark No."
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.unit ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    unit: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.001"
+                                placeholder="Unit Wt"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.length ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    length: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.width ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    width: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.thickness ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    thickness: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                                step="0.001"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                type="number"
+                                value={row.qty ?? ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    qty: Number(e.target.value) || 0,
+                                  })
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                                step="1"
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right font-semibold">
+                              {(
+                                (row.length || 0) *
+                                (row.width || 1) *
+                                (row.thickness || 1) *
+                                (row.qty || 0) *
+                                (row.unit ?? 0)
+                              ).toFixed(3)}
+                            </td>
+                            {breakupKeys.map((key) => (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center"
+                              >
+                                <div className="text-sm font-medium">
+                                  {row.customFields?.[`breakupValue_${key}`] ||
+                                    "-"}
+                                </div>
+                              </td>
+                            ))}
+                            {customColumns.map((column) => (
+                              <td key={column.id} className="p-3 align-top">
+                                <Input
+                                  value={row.customFields?.[column.id] ?? ""}
+                                  onChange={(e) =>
+                                    handleUpdateTempCustomField(
+                                      row.tempId,
+                                      column.id,
+                                      e.target.value,
+                                    )
+                                  }
+                                  className="h-8 text-center"
+                                />
+                              </td>
+                            ))}
+                            <td className="p-3 align-top text-right">-</td>
+                          </tr>
+                        );
+                      }
+                      if (item?.department === "Piping-Spool Status") {
+                        return (
+                          <tr key={row.tempId} className="border-b bg-muted/40">
+                            <td className="p-3 align-top text-muted-foreground">
+                              {filteredRows.length + index + 1}
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={
+                                  row.area !== undefined && row.area !== null
+                                    ? row.area
+                                    : ""
+                                }
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    area: e.target.value,
+                                  })
+                                }
+                                placeholder="Area"
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["drawingNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "drawingNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["revNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "revNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["sheetNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "sheetNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["spoolNo"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "spoolNo",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(
+                                  row.customFields?.["lineSize"] || "",
+                                )}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "lineSize",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="h-8 w-16">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {LINE_SIZE_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      DN{option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Select
+                                value={String(
+                                  row.customFields?.["baseMaterial"] || "",
+                                )}
+                                onValueChange={(value) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "baseMaterial",
+                                    value,
+                                  )
+                                }
+                              >
+                                <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
+                                  <SelectValue placeholder="" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {MOC_OPTIONS.map((option) => (
+                                    <SelectItem key={option} value={option}>
+                                      {option}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.length || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempRow(row.tempId, {
+                                    length: e.target.value as any,
+                                  })
+                                }
+                                onBlur={(e) => {
+                                  const evaluated = evaluateExpression(
+                                    e.target.value,
+                                  );
+                                  if (evaluated !== null) {
+                                    handleUpdateTempRow(row.tempId, {
+                                      length: evaluated,
+                                    });
+                                  }
+                                }}
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                                placeholder="e.g. 2+2"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["inchMeter"] || ""}
+                                className="h-8 w-16 bg-muted"
+                                disabled
+                                title="Auto-calculated: Length × Line Size"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["surfaceArea"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "surfaceArea",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-8 w-16"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["paintSystem"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "paintSystem",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              />
+                            </td>
+                            <td className="p-3 align-top">
+                              <Input
+                                value={row.customFields?.["remarks"] || ""}
+                                onChange={(e) =>
+                                  handleUpdateTempCustomField(
+                                    row.tempId,
+                                    "remarks",
+                                    e.target.value,
+                                  )
+                                }
+                                className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
+                              />
+                            </td>
+                            <td className="p-3 align-top text-right">-</td>
+                          </tr>
+                        );
+                      }
                       return (
                         <tr key={row.tempId} className="border-b bg-muted/40">
                           <td className="p-3 align-top text-muted-foreground">
-                            {filteredRows.length + index + 1}
+                            T{index + 1}
+                          </td>
+                          <td className="p-3 align-top space-y-2">
+                            <Input
+                              value={row.type || ""}
+                              onChange={(e) =>
+                                handleUpdateTempRow(row.tempId, {
+                                  type: e.target.value,
+                                })
+                              }
+                              placeholder="Type *"
+                              className="h-8"
+                            />
                           </td>
                           <td className="p-3 align-top">
                             <Input
@@ -6060,110 +7526,21 @@ export default function MeasurementSheet() {
                                 })
                               }
                               placeholder="Area"
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              className="h-8"
                             />
                           </td>
+
                           <td className="p-3 align-top">
                             <Input
-                              value={row.customFields?.["docNo"] || ""}
+                              type="number"
+                              value={row.length || ""}
                               onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "docNo",
-                                  e.target.value,
-                                )
+                                handleUpdateTempRow(row.tempId, {
+                                  length: Number(e.target.value) || 0,
+                                })
                               }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["lineNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "lineNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["sheetNo"] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "sheetNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["rev"] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "rev",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "moc",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["fjSj"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "fjSj",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["jointNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "jointNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["spoolNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "spoolNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              className="h-8 text-center"
+                              step="0.001"
                             />
                           </td>
                           <td className="p-3 align-top">
@@ -6175,7 +7552,7 @@ export default function MeasurementSheet() {
                                   width: Number(e.target.value) || 0,
                                 })
                               }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
+                              className="h-8 text-center"
                               step="0.001"
                             />
                           </td>
@@ -6188,815 +7565,49 @@ export default function MeasurementSheet() {
                                   thickness: Number(e.target.value) || 0,
                                 })
                               }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["schedule"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "schedule",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["jointType"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "jointType",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.type || ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  type: e.target.value,
-                                })
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["componentPart2"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "componentPart2",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top text-right font-semibold">
-                            -
-                          </td>
-                        </tr>
-                      );
-                    }
-                    if (item?.department === "Equipment Insulation") {
-                      return (
-                        <tr key={row.tempId} className="border-b bg-muted/40">
-                          <td className="p-3 align-top text-muted-foreground">
-                            {filteredRows.length + index + 1}
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["equipmentNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "equipmentNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["equipmentName"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "equipmentName",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(
-                                row.customFields?.["portion"] || "",
-                              )}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "portion",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {EQUIPMENT_PORTION_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(
-                                row.customFields?.["position"] || "",
-                              )}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "position",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                                <SelectValue placeholder="Select" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {EQUIPMENT_POSITION_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.customFields?.["temp"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "temp",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20"
-                              step="0.1"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(row.customFields?.["moc"] || "")}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "moc",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20">
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {EQUIPMENT_MOC_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(
-                                row.customFields?.["insulationType"] || "",
-                              )}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "insulationType",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {EQUIPMENT_INSULATION_TYPE_OPTIONS.map(
-                                  (option) => (
-                                    <SelectItem key={option} value={option}>
-                                      {option}
-                                    </SelectItem>
-                                  ),
-                                )}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.customFields?.["thickness"] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "thickness",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                              step="0.1"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.customFields?.["insulatedDia"] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "insulatedDia",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
+                              className="h-8 text-center"
                               step="0.001"
                             />
                           </td>
                           <td className="p-3 align-top">
                             <Input
                               type="number"
-                              value={row.length ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  length: Number(e.target.value) || 0,
-                                })
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top text-right font-semibold text-muted-foreground">
-                            {row.customFields?.["shellArea"] || "-"}
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.customFields?.["dishFactor"] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "dishFactor",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.customFields?.["dishEndNos"] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "dishEndNos",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-20"
-                              step="1"
-                            />
-                          </td>
-                          <td className="p-3 align-top text-right font-semibold text-muted-foreground">
-                            {row.customFields?.["dishArea"] || "-"}
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.customFields?.["otherArea"] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "otherArea",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top text-right font-semibold text-muted-foreground">
-                            {row.customFields?.["totalArea"] || "-"}
-                          </td>
-                          {breakupKeys.map((key) => (
-                            <td key={key} className="p-3 align-top"></td>
-                          ))}
-                          <td className="p-3 align-top text-right">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleCancelTempRows()}
-                              className="text-destructive hover:text-destructive"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    } else if (item?.department === "Piping Insulation") {
-                      return (
-                        <tr key={row.tempId} className="border-b bg-muted/40">
-                          <td className="p-3 align-top text-muted-foreground">
-                            {filteredRows.length + index + 1}
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["location"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "location",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["drawingNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "drawingNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["sheetNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "sheetNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(row.customFields?.["moc"] || "")}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "moc",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="h-8 w-16">
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {MOC_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(
-                                row.customFields?.["lineSize"] || "",
-                              )}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "lineSize",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="h-8 w-16">
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {LINE_SIZE_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    DN{option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.customFields?.["pipeOD"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "pipeOD",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={
-                                row.customFields?.["insulationThickness"] || ""
-                              }
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "insulationThickness",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(
-                                row.customFields?.["insulationType"] || "",
-                              )}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "insulationType",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {INSULATION_TYPE_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["temp"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "temp",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.length || ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  length: Number(e.target.value) || 0,
-                                })
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyElbow90"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyElbow90",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyElbow45"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyElbow45",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyTee"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyTee",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyReducer"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyReducer",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyEndCap"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyEndCap",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyFlangeRem"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyFlangeRem",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyValveRem"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyValveRem",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyFlangeFix"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyFlangeFix",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["qtyValveFix"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyValveFix",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={
-                                row.customFields?.["qtyWeldValveFix"] || ""
-                              }
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "qtyWeldValveFix",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={
-                                row.customFields?.["totalFittingsLength"] !==
-                                undefined
-                                  ? row.customFields["totalFittingsLength"]
-                                  : ""
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-right w-16"
-                              readOnly
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={
-                                row.customFields?.["rmt"] !== undefined
-                                  ? row.customFields["rmt"]
-                                  : ""
-                              }
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "rmt",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-right w-16"
-                              readOnly
-                            />
-                          </td>
-                          <td className="p-3 align-top text-right font-semibold">
-                            <Input
-                              value={
-                                row.customFields?.["area"] !== undefined
-                                  ? row.customFields["area"]
-                                  : ""
-                              }
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "area",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-right w-20"
-                              readOnly
-                            />
-                          </td>
-                          <td className="p-3 align-top text-right">-</td>
-                        </tr>
-                      );
-                    }
-                    if (item?.department === "Structure") {
-                      return (
-                        <tr key={row.tempId} className="border-b bg-muted/40">
-                          <td className="p-3 align-top text-muted-foreground">
-                            {filteredRows.length + index + 1}
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.type || ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  type: e.target.value,
-                                })
-                              }
-                              placeholder="Description"
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-48"
-                            />
-                          </td>
-
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["structureType"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "structureType",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Type"
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["mark"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "mark",
-                                  e.target.value,
-                                )
-                              }
-                              placeholder="Mark No."
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.unit ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  unit: Number(e.target.value) || 0,
-                                })
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                              step="0.001"
-                              placeholder="Unit Wt"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.length ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  length: Number(e.target.value) || 0,
-                                })
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.width ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  width: Number(e.target.value) || 0,
-                                })
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.thickness ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  thickness: Number(e.target.value) || 0,
-                                })
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                              step="0.001"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              type="number"
-                              value={row.qty ?? ""}
+                              value={row.qty || ""}
                               onChange={(e) =>
                                 handleUpdateTempRow(row.tempId, {
                                   qty: Number(e.target.value) || 0,
                                 })
                               }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                              step="1"
+                              className="h-8 text-center"
+                              min={0}
                             />
                           </td>
                           <td className="p-3 align-top text-right font-semibold">
                             {(
-                              (row.length || 0) *
+                              (row.length || 1) *
                               (row.width || 1) *
                               (row.thickness || 1) *
-                              (row.qty || 0) *
-                              (row.unit ?? 0)
+                              (row.qty || 1) *
+                              (row.unit || 1)
                             ).toFixed(3)}
                           </td>
-                          {breakupKeys.map((key) => (
-                            <td key={key} className="p-3 align-top text-center">
-                              <div className="text-sm font-medium">
-                                {row.customFields?.[`breakupValue_${key}`] ||
-                                  "-"}
-                              </div>
-                            </td>
-                          ))}
+                          <td className="p-3 align-top text-muted-foreground">
+                            Pending save
+                          </td>
+                          {breakupKeys.map((key) => {
+                            const [itemIdStr] = key.split("-");
+                            return (
+                              <td
+                                key={key}
+                                className="p-3 align-top text-center"
+                              >
+                                <div className="text-sm font-medium">
+                                  {row.customFields?.[`breakupValue_${key}`] ||
+                                    "-"}
+                                </div>
+                              </td>
+                            );
+                          })}
                           {customColumns.map((column) => (
                             <td key={column.id} className="p-3 align-top">
                               <Input
@@ -7012,360 +7623,45 @@ export default function MeasurementSheet() {
                               />
                             </td>
                           ))}
-                          <td className="p-3 align-top text-right">-</td>
-                        </tr>
-                      );
-                    }
-                    if (item?.department === "Piping-Spool Status") {
-                      return (
-                        <tr key={row.tempId} className="border-b bg-muted/40">
-                          <td className="p-3 align-top text-muted-foreground">
-                            {filteredRows.length + index + 1}
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={
-                                row.area !== undefined && row.area !== null
-                                  ? row.area
-                                  : ""
-                              }
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  area: e.target.value,
-                                })
-                              }
-                              placeholder="Area"
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["drawingNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "drawingNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["revNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "revNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["sheetNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "sheetNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["spoolNo"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "spoolNo",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(
-                                row.customFields?.["lineSize"] || "",
-                              )}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "lineSize",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="h-8 w-16">
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {LINE_SIZE_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    DN{option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Select
-                              value={String(
-                                row.customFields?.["baseMaterial"] || "",
-                              )}
-                              onValueChange={(value) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "baseMaterial",
-                                  value,
-                                )
-                              }
-                            >
-                              <SelectTrigger className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24">
-                                <SelectValue placeholder="" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {MOC_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    {option}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.length || ""}
-                              onChange={(e) =>
-                                handleUpdateTempRow(row.tempId, {
-                                  length: e.target.value as any,
-                                })
-                              }
-                              onBlur={(e) => {
-                                const evaluated = evaluateExpression(
-                                  e.target.value,
-                                );
-                                if (evaluated !== null) {
-                                  handleUpdateTempRow(row.tempId, {
-                                    length: evaluated,
-                                  });
-                                }
-                              }}
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
-                              placeholder="e.g. 2+2"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["inchMeter"] || ""}
-                              className="h-8 w-16 bg-muted"
+                          <td className="p-3 align-top text-right">
+                            <Button
+                              variant="ghost"
+                              size="sm"
                               disabled
-                              title="Auto-calculated: Length × Line Size"
-                            />
+                              className="text-muted-foreground"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
                           </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["surfaceArea"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "surfaceArea",
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 w-16"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["paintSystem"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "paintSystem",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
-                            />
-                          </td>
-                          <td className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.["remarks"] || ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  "remarks",
-                                  e.target.value,
-                                )
-                              }
-                              className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
-                            />
-                          </td>
-                          <td className="p-3 align-top text-right">-</td>
                         </tr>
                       );
-                    }
-                    return (
-                      <tr key={row.tempId} className="border-b bg-muted/40">
-                        <td className="p-3 align-top text-muted-foreground">
-                          T{index + 1}
-                        </td>
-                        <td className="p-3 align-top space-y-2">
-                          <Input
-                            value={row.type || ""}
-                            onChange={(e) =>
-                              handleUpdateTempRow(row.tempId, {
-                                type: e.target.value,
-                              })
-                            }
-                            placeholder="Type *"
-                            className="h-8"
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            value={row.area || ""}
-                            onChange={(e) =>
-                              handleUpdateTempRow(row.tempId, {
-                                area: e.target.value,
-                              })
-                            }
-                            placeholder="Area"
-                            className="h-8"
-                          />
-                        </td>
+                    })}
 
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.length || ""}
-                            onChange={(e) =>
-                              handleUpdateTempRow(row.tempId, {
-                                length: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="h-8 text-center"
-                            step="0.001"
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.width || ""}
-                            onChange={(e) =>
-                              handleUpdateTempRow(row.tempId, {
-                                width: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="h-8 text-center"
-                            step="0.001"
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.thickness || ""}
-                            onChange={(e) =>
-                              handleUpdateTempRow(row.tempId, {
-                                thickness: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="h-8 text-center"
-                            step="0.001"
-                          />
-                        </td>
-                        <td className="p-3 align-top">
-                          <Input
-                            type="number"
-                            value={row.qty || ""}
-                            onChange={(e) =>
-                              handleUpdateTempRow(row.tempId, {
-                                qty: Number(e.target.value) || 0,
-                              })
-                            }
-                            className="h-8 text-center"
-                            min={0}
-                          />
-                        </td>
-                        <td className="p-3 align-top text-right font-semibold">
-                          {(
-                            (row.length || 1) *
-                            (row.width || 1) *
-                            (row.thickness || 1) *
-                            (row.qty || 1) *
-                            (row.unit || 1)
-                          ).toFixed(3)}
-                        </td>
-                        <td className="p-3 align-top text-muted-foreground">
-                          Pending save
-                        </td>
-                        {breakupKeys.map((key) => {
-                          const [itemIdStr] = key.split("-");
-                          return (
-                            <td key={key} className="p-3 align-top text-center">
-                              <div className="text-sm font-medium">
-                                {row.customFields?.[`breakupValue_${key}`] ||
-                                  "-"}
-                              </div>
-                            </td>
-                          );
-                        })}
-                        {customColumns.map((column) => (
-                          <td key={column.id} className="p-3 align-top">
-                            <Input
-                              value={row.customFields?.[column.id] ?? ""}
-                              onChange={(e) =>
-                                handleUpdateTempCustomField(
-                                  row.tempId,
-                                  column.id,
-                                  e.target.value,
-                                )
-                              }
-                              className="h-8 text-center"
-                            />
-                          </td>
-                        ))}
-                        <td className="p-3 align-top text-right">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            disabled
-                            className="text-muted-foreground"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-
-                <tr className="bg-muted/40 font-semibold">
-                  <td colSpan={5} className="p-3">
-                    Subtotal - {selectedAreaLabel}
-                  </td>
-                  <td colSpan={3} className="p-3 text-center">
-                    Qty: {subtotalQty.toFixed(2)}
-                  </td>
-                  <td className="p-3 text-right">
-                    {subtotalWeight.toFixed(3)}{" "}
-                    {item?.unitOfMeasurement || "MT"}
-                  </td>
-                </tr>
-                <tr className="bg-muted font-semibold"></tr>
-              </tbody>
-            </table>
-          </div>
-          <ScrollBar orientation="vertical" className="bg-slate-100 dark:bg-slate-800" />
-          <ScrollBar orientation="horizontal" className="bg-slate-100 dark:bg-slate-800" />
-        </ScrollArea>
+                  <tr className="bg-muted/40 font-semibold">
+                    <td colSpan={5} className="p-3">
+                      Subtotal - {selectedAreaLabel}
+                    </td>
+                    <td colSpan={3} className="p-3 text-center">
+                      Qty: {subtotalQty.toFixed(2)}
+                    </td>
+                    <td className="p-3 text-right">
+                      {subtotalWeight.toFixed(3)}{" "}
+                      {item?.unitOfMeasurement || "MT"}
+                    </td>
+                  </tr>
+                  <tr className="bg-muted font-semibold"></tr>
+                </tbody>
+              </table>
+            </div>
+            <ScrollBar
+              orientation="vertical"
+              className="bg-slate-100 dark:bg-slate-800"
+            />
+            <ScrollBar
+              orientation="horizontal"
+              className="bg-slate-100 dark:bg-slate-800"
+            />
+          </ScrollArea>
         </CardContent>
 
         {isAddingRows && (
