@@ -61,16 +61,28 @@ export default function Profile() {
     }
   };
 
-  const handleDeleteAllData = () => {
+  const handleDeleteAllData = async () => {
     if (!currentUser) return;
-    clearUserData(currentUser.id);
-    setIsDeleteDialogOpen(false);
-    toast({
-      title: "Data Cleared",
-      description: "All your data has been permanently deleted.",
-    });
-    // Force reload to reflect changes
-    window.location.reload();
+
+    try {
+      await clearUserData(currentUser.id);
+      setIsDeleteDialogOpen(false);
+      toast({
+        title: "Data Cleared",
+        description:
+          "All your data has been permanently deleted from the database.",
+      });
+      // Force reload to reflect changes
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to delete user data:", error);
+      setIsDeleteDialogOpen(false);
+      toast({
+        title: "Error",
+        description: "Failed to delete your data. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const userEmail = currentUser?.email || "";

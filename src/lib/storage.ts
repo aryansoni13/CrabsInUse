@@ -615,9 +615,57 @@ export const initializeSampleData = async (userId: string): Promise<void> => {
 };
 
 export const clearUserData = async (userId: string): Promise<void> => {
-  console.warn(
-    "Clear User Data not fully implemented for Cloud Storage safety",
-  );
+  // Delete data in order to respect foreign key constraints
+  // Start with the most dependent tables first
+
+  // 1. Delete measurement rows (depends on items)
+  const { error: measurementError } = await supabase
+    .from("measurement_rows")
+    .delete()
+    .eq("user_id", userId);
+  if (measurementError) throw measurementError;
+
+  // 2. Delete items (depends on orders)
+  const { error: itemsError } = await supabase
+    .from("items")
+    .delete()
+    .eq("user_id", userId);
+  if (itemsError) throw itemsError;
+
+  // 3. Delete RA bills (depends on orders)
+  const { error: raBillsError } = await supabase
+    .from("ra_bills")
+    .delete()
+    .eq("user_id", userId);
+  if (raBillsError) throw raBillsError;
+
+  // 4. Delete orders (depends on projects)
+  const { error: ordersError } = await supabase
+    .from("orders")
+    .delete()
+    .eq("user_id", userId);
+  if (ordersError) throw ordersError;
+
+  // 5. Delete projects
+  const { error: projectsError } = await supabase
+    .from("projects")
+    .delete()
+    .eq("user_id", userId);
+  if (projectsError) throw projectsError;
+
+  // 6. Delete custom columns
+  const { error: customColumnsError } = await supabase
+    .from("custom_columns")
+    .delete()
+    .eq("user_id", userId);
+  if (customColumnsError) throw customColumnsError;
+
+  // 7. Delete departments
+  const { error: departmentsError } = await supabase
+    .from("departments")
+    .delete()
+    .eq("user_id", userId);
+  if (departmentsError) throw departmentsError;
 };
 
 // --- Users ---

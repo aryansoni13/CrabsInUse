@@ -1909,42 +1909,39 @@ export default function MeasurementSheet() {
     if (!columnGroups || columnGroups.length === 0) return false;
 
     // Find active groups that contain this milestone
-    const activeGroups = columnGroups.filter(
+    const activeGroup = columnGroups.find(
       (g) => g.isActive && g.selectedColumns.includes(milestoneItemDescription),
     );
-    if (activeGroups.length === 0) return false; // Not in any active group
+    if (!activeGroup) return false; // Not in any active group
 
-    // For each active group, check if another milestone in the group has data
-    for (const group of activeGroups) {
-      const milestonesInGroup = group.selectedColumns;
+    // Check if any OTHER column in this group has a value
+    return activeGroup.selectedColumns.some((colName) => {
+      // Skip checking against itself
+      if (colName === milestoneItemDescription) return false;
 
-      // Find the corresponding item IDs for these descriptions
-      const itemIdsInGroup = headerGroups
-        .filter((hg) => milestonesInGroup.includes(hg.description || ""))
-        .map((hg) => hg.itemId);
+      // Check if this other column has any value in the row
+      // We need to match the colName against the breakupStatus keys
+      return Object.entries(row.breakupStatus).some(([key, status]) => {
+        // key format: itemId-percentage-name or percentage-name
+        let name = "";
+        const parts = key.split("-");
+        const percentageIndex = parts.findIndex((p) => p.includes("%"));
 
-      // Check if any OTHER milestone in this group has data
-      for (const itemIdInGroup of itemIdsInGroup) {
-        // Skip the current milestone we're checking
-        const currentMilestoneItemId = headerGroups.find(
-          (hg) => hg.description === milestoneItemDescription,
-        )?.itemId;
-        if (itemIdInGroup === currentMilestoneItemId) continue;
+        if (percentageIndex !== -1) {
+          name = parts.slice(percentageIndex + 1).join("-");
+        } else {
+          // Fallback logic if format is unexpected
+          name = parts[parts.length - 1];
+        }
 
-        // Check all breakup keys for this item
-        const breakupKeysForItem = breakupKeys.filter((key) =>
-          key.startsWith(`${itemIdInGroup}-`),
-        );
-
-        // If any of these keys have data (done=true or completedWeight>0), disable
-        const hasData = breakupKeysForItem.some((key) => {
-          const status = row.breakupStatus[key];
-          return status && (status.done || (status.completedWeight || 0) > 0);
-        });
-        if (hasData) return true; // Another milestone in group has data, disable this one
-      }
-    }
-    return false; // No conflicts, allow interaction
+        if (name === colName) {
+          return (
+            (status.completedQty || 0) > 0 || (status.completedWeight || 0) > 0
+          );
+        }
+        return false;
+      });
+    });
   };
   const confirmDeleteRow = async () => {
     try {
