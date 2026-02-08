@@ -497,6 +497,38 @@ const EQUIPMENT_INSULATION_TYPE_OPTIONS = ["Hot", "Cold", "Acoustic", "Dual"];
 const LINE_SIZE_OPTIONS = Object.keys(IS_FACTOR_TABLE).sort(
   (a, b) => Number(a) - Number(b),
 );
+const SPOOL_LINE_SIZE_FACTORS = [
+  { dn: "DN15", value: 0.25 },
+  { dn: "DN20", value: 0.75 },
+  { dn: "DN25", value: 1 },
+  { dn: "DN32", value: 1.25 },
+  { dn: "DN40", value: 1.5 },
+  { dn: "DN50", value: 2 },
+  { dn: "DN65", value: 2.5 },
+  { dn: "DN80", value: 3 },
+  { dn: "DN100", value: 4 },
+  { dn: "DN125", value: 5 },
+  { dn: "DN150", value: 6 },
+  { dn: "DN200", value: 8 },
+  { dn: "DN250", value: 10 },
+  { dn: "DN300", value: 12 },
+  { dn: "DN350", value: 14 },
+  { dn: "DN400", value: 16 },
+  { dn: "DN450", value: 18 },
+  { dn: "DN500", value: 20 },
+  { dn: "DN550", value: 22 },
+  { dn: "DN600", value: 24 },
+  { dn: "DN650", value: 26 },
+  { dn: "DN700", value: 28 },
+  { dn: "DN750", value: 30 },
+  { dn: "DN800", value: 32 },
+  { dn: "DN850", value: 34 },
+  { dn: "DN900", value: 36 },
+  { dn: "DN950", value: 38 },
+  { dn: "DN1000", value: 40 },
+  { dn: "DN1050", value: 42 },
+  { dn: "DN1100", value: 44 },
+];
 const getISFactors = (lineSize: string) => {
   return IS_FACTOR_TABLE[lineSize] || IS_FACTOR_TABLE["50"];
 };
@@ -5899,9 +5931,12 @@ export default function MeasurementSheet() {
                                 <SelectValue placeholder="" />
                               </SelectTrigger>
                               <SelectContent>
-                                {LINE_SIZE_OPTIONS.map((option) => (
-                                  <SelectItem key={option} value={option}>
-                                    DN{option}
+                                {SPOOL_LINE_SIZE_FACTORS.map((factor) => (
+                                  <SelectItem
+                                    key={factor.dn}
+                                    value={String(factor.value)}
+                                  >
+                                    {factor.value}
                                   </SelectItem>
                                 ))}
                               </SelectContent>
