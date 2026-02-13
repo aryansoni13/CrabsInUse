@@ -79,7 +79,7 @@ export default function Items() {
   const [order, setOrder] = useState<Order | null>(null);
   const [items, setItems] = useState<ItemWithCalculations[]>([]);
   const [filteredItems, setFilteredItems] = useState<ItemWithCalculations[]>(
-    []
+    [],
   );
   const [departments, setDepartments] = useState<string[]>([]);
   const [allMeasurementRows, setAllMeasurementRows] = useState<
@@ -89,7 +89,7 @@ export default function Items() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ItemWithCalculations | null>(
-    null
+    null,
   );
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -224,7 +224,7 @@ export default function Items() {
         ...item,
         totalMeasuredAmount: 0, // TODO: Calculate from measurement rows
         completedPercentage: 0, // TODO: Calculate from measurement progress
-      })
+      }),
     );
 
     setItems(itemsWithCalculations);
@@ -243,7 +243,7 @@ export default function Items() {
 
     // Process sequentially or use Promise.all
     const promises = orderItems.map((item) =>
-      measurementStorage.getByItemId(item.id, currentUser.id)
+      measurementStorage.getByItemId(item.id, currentUser.id),
     );
 
     const results = await Promise.all(promises);
@@ -271,7 +271,7 @@ export default function Items() {
       department: string;
       previousQty?: number;
       previousWeight?: number;
-    }>
+    }>,
   ) => {
     if (!orderId) return;
 
@@ -297,16 +297,19 @@ export default function Items() {
 
       // Update measurement rows to lock the quantities
       // Group all locks by rowId so we can update all milestones for a row at once
-      const rowUpdates = new Map<string, {
-        row: MeasurementRow;
-        latestRow: MeasurementRow;
-        milestones: Array<{
-          breakupKey: string;
-          qty: number;
-          weight: number;
-          itemId: string;
-        }>;
-      }>();
+      const rowUpdates = new Map<
+        string,
+        {
+          row: MeasurementRow;
+          latestRow: MeasurementRow;
+          milestones: Array<{
+            breakupKey: string;
+            qty: number;
+            weight: number;
+            itemId: string;
+          }>;
+        }
+      >();
 
       // Get all latest rows once to reduce calls
       const allLatestRows = await measurementStorage.getAll(currentUser.id);
@@ -315,7 +318,7 @@ export default function Items() {
       for (const data of lockedData) {
         const row = allMeasurementRows.find((r) => r.id === data.rowId);
         if (!row) continue;
-        
+
         const latestRow = allLatestRows.find((r) => r.id === data.rowId);
         if (!latestRow) continue;
 
@@ -338,10 +341,10 @@ export default function Items() {
       // Now update each row with ALL its milestones at once
       for (const [rowId, updateData] of rowUpdates) {
         const { row, latestRow, milestones } = updateData;
-        
+
         // Build the complete breakupStatus with all milestones locked
         const newBreakupStatus = { ...latestRow.breakupStatus };
-        
+
         for (const milestone of milestones) {
           const currentStatus = newBreakupStatus[milestone.breakupKey] || {
             done: false,
@@ -356,7 +359,7 @@ export default function Items() {
           const originalLockedWeight = currentStatus.lockedWeight || 0;
           const newLockedQty = originalLockedQty + milestone.qty;
           const newLockedWeight = originalLockedWeight + milestone.weight;
-          
+
           // Mark as fully done if locked equals full row quantity
           const isFullyLocked = Math.abs(newLockedQty - row.qty) < 0.001;
 
@@ -403,7 +406,7 @@ export default function Items() {
     // Filter by department
     if (filters.department && filters.department !== "__all__") {
       filtered = filtered.filter(
-        (item) => item.department === filters.department
+        (item) => item.department === filters.department,
       );
     }
 
@@ -465,13 +468,13 @@ export default function Items() {
     index: number,
     field: "name" | "percentage",
     value: string | number,
-    isEdit = false
+    isEdit = false,
   ) => {
     const setter = isEdit ? setEditItem : setNewItem;
     setter((prev) => ({
       ...prev,
       billingBreakup: prev.billingBreakup.map((breakup, i) =>
-        i === index ? { ...breakup, [field]: value } : breakup
+        i === index ? { ...breakup, [field]: value } : breakup,
       ),
     }));
   };
@@ -479,7 +482,7 @@ export default function Items() {
   const validateBillingBreakup = (breakup: BillingBreakup[]) => {
     const totalPercentage = breakup.reduce(
       (sum, breakup) => sum + breakup.percentage,
-      0
+      0,
     );
     return (
       totalPercentage === 100 &&
@@ -524,7 +527,7 @@ export default function Items() {
       if (!currentUser) return;
       await departmentStorage.getOrCreate(
         finalDepartment.trim(),
-        currentUser.id
+        currentUser.id,
       );
 
       await itemStorage.create({
@@ -636,7 +639,7 @@ export default function Items() {
       if (!currentUser) return;
       await departmentStorage.getOrCreate(
         finalDepartment.trim(),
-        currentUser.id
+        currentUser.id,
       );
 
       await itemStorage.update(editingItem.id, {
@@ -650,8 +653,7 @@ export default function Items() {
         billingBreakup: editItem.billingBreakup.map((b) => ({
           ...b,
           name: b.name.trim(),
-        }),
-        ),
+        })),
       });
 
       setIsEditDialogOpen(false);
@@ -780,7 +782,7 @@ export default function Items() {
                   index,
                   "percentage",
                   parseFloat(e.target.value) || 0,
-                  isEdit
+                  isEdit,
                 )
               }
               className="w-24"
@@ -803,7 +805,7 @@ export default function Items() {
           Total:{" "}
           {item.billingBreakup.reduce(
             (sum: number, b: any) => sum + b.percentage,
-            0
+            0,
           )}
           %
         </div>
@@ -894,9 +896,11 @@ export default function Items() {
                           ...prev,
                           description: value,
                           // Auto-populate short description if it's empty or matches previous description
-                          shortDescription: !prev.shortDescription || prev.shortDescription === prev.description 
-                            ? value 
-                            : prev.shortDescription,
+                          shortDescription:
+                            !prev.shortDescription ||
+                            prev.shortDescription === prev.description
+                              ? value
+                              : prev.shortDescription,
                         }));
                       }}
                     />
@@ -1092,9 +1096,11 @@ export default function Items() {
                           ...prev,
                           description: value,
                           // Auto-populate short description if it's empty or matches previous description
-                          shortDescription: !prev.shortDescription || prev.shortDescription === prev.description 
-                            ? value 
-                            : prev.shortDescription,
+                          shortDescription:
+                            !prev.shortDescription ||
+                            prev.shortDescription === prev.description
+                              ? value
+                              : prev.shortDescription,
                         }));
                       }}
                     />
@@ -1517,7 +1523,7 @@ export default function Items() {
                 <div>
                   <p className="text-2xl font-bold">
                     {formatCurrency(
-                      filteredItems.reduce((sum, item) => sum + item.amount, 0)
+                      filteredItems.reduce((sum, item) => sum + item.amount, 0),
                     )}
                   </p>
                   <p className="text-xs text-muted-foreground">Total Amount</p>
@@ -1550,8 +1556,8 @@ export default function Items() {
                       ? formatCurrency(
                           filteredItems.reduce(
                             (sum, item) => sum + item.amount,
-                            0
-                          ) / filteredItems.length
+                            0,
+                          ) / filteredItems.length,
                         )
                       : "₹0"}
                   </p>

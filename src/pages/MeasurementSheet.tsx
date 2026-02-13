@@ -11,7 +11,6 @@ import {
   Settings,
   Edit3,
   Download,
-  Lock,
   Layers,
   Copy,
   Clipboard,
@@ -4774,10 +4773,13 @@ export default function MeasurementSheet() {
                                 <div className="flex flex-col items-center gap-1">
                                   {isLocked || isRowLocked ? (
                                     <div
-                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
                                     >
-                                      <Lock className="h-4 w-4" />
+                                      {row.breakupStatus[key]?.inputValue ||
+                                        row.breakupStatus[legacyKey]
+                                          ?.inputValue ||
+                                        "✓"}
                                     </div>
                                   ) : (
                                     <Input
@@ -5101,10 +5103,11 @@ export default function MeasurementSheet() {
                                 <div className="flex flex-col items-center gap-1">
                                   {isLocked || isRowLocked ? (
                                     <div
-                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
                                     >
-                                      <Lock className="h-4 w-4" />
+                                      {row.breakupStatus[key]?.inputValue ||
+                                        "✓"}
                                     </div>
                                   ) : (
                                     <Input
@@ -5528,10 +5531,11 @@ export default function MeasurementSheet() {
                                 <div className="flex flex-col items-center gap-1">
                                   {isLocked || isRowLocked ? (
                                     <div
-                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
                                     >
-                                      <Lock className="h-4 w-4" />
+                                      {row.breakupStatus[key]?.inputValue ||
+                                        "✓"}
                                     </div>
                                   ) : (
                                     <Input
@@ -5751,10 +5755,13 @@ export default function MeasurementSheet() {
                                 <div className="flex flex-col items-center gap-1">
                                   {isLocked || isRowLocked ? (
                                     <div
-                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
                                     >
-                                      <Lock className="h-4 w-4" />
+                                      {row.breakupStatus[key]?.inputValue ||
+                                        row.breakupStatus[legacyKey]
+                                          ?.inputValue ||
+                                        "✓"}
                                     </div>
                                   ) : (
                                     <Input
@@ -6074,10 +6081,11 @@ export default function MeasurementSheet() {
                                 <div className="flex flex-col items-center gap-1">
                                   {isLocked || isRowLocked ? (
                                     <div
-                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground"
+                                      className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
                                     >
-                                      <Lock className="h-4 w-4" />
+                                      {row.breakupStatus[key]?.inputValue ||
+                                        "✓"}
                                     </div>
                                   ) : (
                                     <Input
@@ -6269,10 +6277,10 @@ export default function MeasurementSheet() {
                             <td key={key} className="p-3 align-top text-center">
                               {isLocked || isRowLocked ? (
                                 <div
-                                  className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground mx-auto"
+                                  className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium mx-auto"
                                   title="Locked"
                                 >
-                                  <Lock className="h-4 w-4" />
+                                  {row.breakupStatus[key]?.inputValue || "✓"}
                                 </div>
                               ) : (
                                 <Input

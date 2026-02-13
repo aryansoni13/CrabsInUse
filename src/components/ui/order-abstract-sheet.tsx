@@ -31,7 +31,7 @@ interface OrderAbstractSheetProps {
       department: string;
       previousQty: number;
       previousWeight: number;
-    }>
+    }>,
   ) => void;
   existingRACount: number;
 }
@@ -71,12 +71,13 @@ export function OrderAbstractSheet({
       let completedQty = 0;
 
       itemRows.forEach((row) => {
-        const status = row.breakupStatus?.[newKey] || row.breakupStatus?.[legacyKey];
+        const status =
+          row.breakupStatus?.[newKey] || row.breakupStatus?.[legacyKey];
         const department = item.department || "";
-        
+
         // Determine the billing quantity based on department
         let billingQtyForRow = row.qty;
-        
+
         if (department === "Piping-Spool Status") {
           // For Piping-Spool Status, use inchMeter for billing
           billingQtyForRow = Number(row.customFields?.inchMeter) || 0;
@@ -87,11 +88,11 @@ export function OrderAbstractSheet({
           // For Equipment Insulation, use total quantity (area) directly
           billingQtyForRow = row.qty;
         }
-        
+
         // For Piping-LHS, completedQty IS the weight, so we use it directly
         // For other departments, we calculate based on completedQty ratio
         const isWeightBasedDepartment = department === "Piping-LHS";
-        
+
         // Previous = locked quantities from previous RA bills for THIS milestone
         const locked = status?.lockedQty || 0;
         if (isWeightBasedDepartment) {
@@ -114,31 +115,31 @@ export function OrderAbstractSheet({
 
       // Cumulative weight is based on completed quantities for this milestone
       const cumulativeWeight = completedWeight;
-      
+
       // Apply breakup percentage to quantities for billing display
       // The quantity shown in bill should be proportional to the breakup percentage
       const breakupMultiplier = breakup.percentage / 100;
-      
+
       // Previous certified qty = previous weight * breakup percentage
-      const previousCertifiedQty = previousWeight * breakupMultiplier;
-      
+      const previousCertifiedQty = previousWeight;
+
       // Previous amount = previous weight * rate * breakup percentage
-      const previousAmount = previousWeight * item.unitRate * breakupMultiplier;
-      
+      const previousAmount = previousWeight * item.unitRate;
+
       // Executed weight = completed weight - already locked weight for THIS milestone
       const executedWeight = completedWeight - previousWeight;
-      
+
       // Current certified qty = executed weight * breakup percentage
-      const currentCertifiedQty = executedWeight * breakupMultiplier;
-      
+      const currentCertifiedQty = executedWeight;
+
       // Amount for this bill = executed weight * rate * breakup percentage
-      const amount = executedWeight * item.unitRate * breakupMultiplier;
-      
+      const amount = executedWeight * item.unitRate;
+
       // Cumulative certified qty = cumulative weight * breakup percentage
-      const cumulativeCertifiedQty = cumulativeWeight * breakupMultiplier;
-      
+      const cumulativeCertifiedQty = cumulativeWeight;
+
       // Cumulative amount includes milestone percentage
-      const cumulativeAmount = cumulativeWeight * item.unitRate * breakupMultiplier;
+      const cumulativeAmount = cumulativeWeight * item.unitRate;
 
       return {
         breakupKey: newKey,
@@ -168,31 +169,31 @@ export function OrderAbstractSheet({
   const grandTotalPreviousCertifiedQty = executedData.reduce(
     (sum, item) =>
       sum + item.breakupsData.reduce((s, b) => s + b.previousCertifiedQty, 0),
-    0
+    0,
   );
   const grandTotalPreviousAmount = executedData.reduce(
     (sum, item) =>
       sum + item.breakupsData.reduce((s, b) => s + b.previousAmount, 0),
-    0
+    0,
   );
   const grandTotalCurrentCertifiedQty = executedData.reduce(
     (sum, item) =>
       sum + item.breakupsData.reduce((s, b) => s + b.currentCertifiedQty, 0),
-    0
+    0,
   );
   const grandTotalAmount = executedData.reduce(
     (sum, item) => sum + item.breakupsData.reduce((s, b) => s + b.amount, 0),
-    0
+    0,
   );
   const grandTotalCumulativeCertifiedQty = executedData.reduce(
     (sum, item) =>
       sum + item.breakupsData.reduce((s, b) => s + b.cumulativeCertifiedQty, 0),
-    0
+    0,
   );
   const grandTotalCumulativeAmount = executedData.reduce(
     (sum, item) =>
       sum + item.breakupsData.reduce((s, b) => s + b.cumulativeAmount, 0),
-    0
+    0,
   );
 
   const handleGenerateRA = () => {
@@ -208,23 +209,24 @@ export function OrderAbstractSheet({
       previousQty: number;
       previousWeight: number;
     }> = [];
-    
+
     executedData.forEach((itemData) => {
       // Get all measurement rows for this item
       const measurementRows = allMeasurementRows.filter(
-        (row) => row.itemId === itemData.item.id
+        (row) => row.itemId === itemData.item.id,
       );
 
       itemData.breakupsData.forEach((breakupData) => {
         measurementRows.forEach((row) => {
           const newKey = breakupData.breakupKey;
           const legacyKey = `${breakupData.percentage}%-${breakupData.name}`;
-          const status = row.breakupStatus?.[newKey] || row.breakupStatus?.[legacyKey];
-          
+          const status =
+            row.breakupStatus?.[newKey] || row.breakupStatus?.[legacyKey];
+
           const alreadyLocked = status?.lockedQty || 0;
           // Only lock the completedQty for THIS specific milestone, not full row.qty
           const completedQty = status?.completedQty || 0;
-          
+
           // Qty to lock = completedQty - already locked for this milestone
           const qtyToLock = completedQty - alreadyLocked;
 
@@ -232,7 +234,7 @@ export function OrderAbstractSheet({
             // Calculate weight for this qty
             const weightPerUnit = row.qty > 0 ? row.totalWeight / row.qty : 0;
             const weightToLock = qtyToLock * weightPerUnit;
-            
+
             dataToLock.push({
               itemId: itemData.item.id,
               rowId: row.id,
@@ -288,7 +290,7 @@ export function OrderAbstractSheet({
   const renderMeasurementTable = (
     item: Item,
     itemRows: MeasurementRow[],
-    allMilestones: { percentage: number; name: string; key: string }[]
+    allMilestones: { percentage: number; name: string; key: string }[],
   ) => {
     return (
       <div className="overflow-x-auto">
@@ -460,7 +462,9 @@ export function OrderAbstractSheet({
               const commonMilestoneCells = breakupStatuses.map(
                 (breakupStatus, idx) => {
                   // Apply breakup percentage to the displayed quantity
-                  const proportionalQty = breakupStatus.status.completedQty * (breakupStatus.percentage / 100);
+                  const proportionalQty =
+                    breakupStatus.status.completedQty *
+                    (breakupStatus.percentage / 100);
                   return (
                     <td key={idx} className="border p-2 text-center">
                       {breakupStatus.status.done ? (
@@ -475,7 +479,7 @@ export function OrderAbstractSheet({
                       )}
                     </td>
                   );
-                }
+                },
               );
 
               if (item.department === "Piping-LHS") {
@@ -568,7 +572,7 @@ export function OrderAbstractSheet({
                     <td className="border p-2 text-center">
                       {row.customFields?.shellArea
                         ? parseFloat(
-                            String(row.customFields.shellArea)
+                            String(row.customFields.shellArea),
                           ).toFixed(3)
                         : "-"}
                     </td>
@@ -581,7 +585,7 @@ export function OrderAbstractSheet({
                     <td className="border p-2 text-center">
                       {row.customFields?.dishArea
                         ? parseFloat(String(row.customFields.dishArea)).toFixed(
-                            3
+                            3,
                           )
                         : "-"}
                     </td>
@@ -773,14 +777,14 @@ export function OrderAbstractSheet({
                   item.department === "Piping-LHS"
                     ? 16
                     : item.department === "Equipment Insulation"
-                    ? 16
-                    : item.department === "Piping Insulation"
-                    ? 23
-                    : item.department === "Structure"
-                    ? 9
-                    : item.department === "Piping-Spool Status"
-                    ? 13
-                    : 8
+                      ? 16
+                      : item.department === "Piping Insulation"
+                        ? 23
+                        : item.department === "Structure"
+                          ? 9
+                          : item.department === "Piping-Spool Status"
+                            ? 13
+                            : 8
                 }
               >
                 SUBTOTAL - {item.itemCode || "N/A"}
@@ -796,11 +800,12 @@ export function OrderAbstractSheet({
               {allMilestones.map((milestone, idx) => {
                 const subtotalCompleted = itemRows.reduce((sum, row) => {
                   const status = row.breakupStatus[milestone.key];
-                  const rawQty = status.completedQty > status.lockedQty && !status.done
-                    ? status?.completedWeight || 0
-                    : 0;
+                  const rawQty =
+                    status.completedQty > status.lockedQty && !status.done
+                      ? status?.completedWeight || 0
+                      : 0;
                   // Apply breakup percentage for proportional display
-                  return sum + (rawQty * (milestone.percentage / 100));
+                  return sum + rawQty * (milestone.percentage / 100);
                 }, 0);
 
                 return (
@@ -1111,7 +1116,7 @@ export function OrderAbstractSheet({
                       status.completedQty &&
                       status.completedQty > 0 &&
                       !status.done &&
-                      status.completedQty > status.lockedQty
+                      status.completedQty > status.lockedQty,
                   )
                 );
               });
@@ -1182,8 +1187,8 @@ export function OrderAbstractSheet({
               allMeasurementRows
                 .filter((row) =>
                   Object.values(row.breakupStatus).some(
-                    (status) => status.completedQty && status.completedQty > 0
-                  )
+                    (status) => status.completedQty && status.completedQty > 0,
+                  ),
                 )
                 .forEach((row) => {
                   Object.keys(row.breakupStatus).forEach((key) => {
@@ -1193,7 +1198,7 @@ export function OrderAbstractSheet({
 
               // Convert milestone keys to structured data
               const allGrandTotalMilestones = Array.from(
-                allGrandTotalMilestoneKeys
+                allGrandTotalMilestoneKeys,
               )
                 .map((key) => {
                   const parts = key.split("-");
@@ -1218,8 +1223,8 @@ export function OrderAbstractSheet({
                           .filter((row) =>
                             Object.values(row.breakupStatus).some(
                               (status) =>
-                                status.completedQty && status.completedQty > 0
-                            )
+                                status.completedQty && status.completedQty > 0,
+                            ),
                           )
                           .reduce((sum, row) => sum + row.totalWeight, 0)
                           .toFixed(3)}{" "}
@@ -1231,8 +1236,8 @@ export function OrderAbstractSheet({
                         .filter((row) =>
                           Object.values(row.breakupStatus).some(
                             (status) =>
-                              status.completedQty && status.completedQty > 0
-                          )
+                              status.completedQty && status.completedQty > 0,
+                          ),
                         )
                         .reduce((sum, row) => {
                           const status = row.breakupStatus[milestone.key];
