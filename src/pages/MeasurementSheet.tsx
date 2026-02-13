@@ -2831,7 +2831,10 @@ export default function MeasurementSheet() {
         <CardContent className="p-0">
           <ScrollArea className="h-[500px] work-entries-scroll">
             <div className="min-w-max">
-              <table ref={tableRef} className="w-full text-sm">
+              <table
+                ref={tableRef}
+                className="w-full text-sm measurement-table"
+              >
                 <thead className="bg-background sticky top-0 z-20 shadow-sm">
                   {item?.department === "Piping-LHS" ? (
                     <>
