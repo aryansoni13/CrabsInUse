@@ -3503,25 +3503,25 @@ export default function MeasurementSheet() {
                           Vlv Fix
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Weld Vlv
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Fittings Length (m)
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           RMT (m)
                         </th>
                         <th
-                          className="p-3 text-right"
+                          className="p-0 text-right"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Area (sqm)
@@ -3530,7 +3530,7 @@ export default function MeasurementSheet() {
                           <th
                             key={group.itemId}
                             colSpan={group.count}
-                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                            className="p-0 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
                           >
                             <Input
                               value={
@@ -3556,7 +3556,7 @@ export default function MeasurementSheet() {
                           </th>
                         ))}
                         <th
-                          className="p-3 text-right"
+                          className="p-0 text-right"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Actions
@@ -3567,7 +3567,7 @@ export default function MeasurementSheet() {
                           {breakupColumns.map((column) => (
                             <th
                               key={`${column.itemId}-${column.name}`}
-                              className="p-3 text-center"
+                              className="p-0 text-center"
                             >
                               <div className="flex flex-col items-center justify-center">
                                 <span className="font-bold text-xs">
@@ -3851,62 +3851,62 @@ export default function MeasurementSheet() {
                     <>
                       <tr>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Sr.
                         </th>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Item Description
                         </th>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Type
                         </th>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Mark No.
                         </th>
 
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Unit Weight
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Length
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Width
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Thickness
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Qty
                         </th>
                         <th
-                          className="p-3 text-right"
+                          className="p-0 text-right"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Total ({item?.unitOfMeasurement || "MT"})
@@ -3915,7 +3915,7 @@ export default function MeasurementSheet() {
                           <th
                             key={group.itemId}
                             colSpan={group.count}
-                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                            className="p-0 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
                           >
                             <Input
                               value={
@@ -3943,7 +3943,7 @@ export default function MeasurementSheet() {
                         {customColumns.map((column) => (
                           <th
                             key={column.id}
-                            className="p-3 text-center"
+                            className="p-0 text-center"
                             rowSpan={hasBreakups ? 2 : 1}
                           >
                             <div className="flex items-center justify-center gap-1">
@@ -3960,7 +3960,7 @@ export default function MeasurementSheet() {
                           </th>
                         ))}
                         <th
-                          className="p-3 text-right"
+                          className="p-0 text-right"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Actions
@@ -3971,7 +3971,7 @@ export default function MeasurementSheet() {
                           {breakupColumns.map((column) => (
                             <th
                               key={`${column.itemId}-${column.name}`}
-                              className="p-3 text-center"
+                              className="p-0 text-center"
                             >
                               <div className="flex flex-col items-center justify-center">
                                 <span className="font-bold text-xs">
@@ -4049,79 +4049,79 @@ export default function MeasurementSheet() {
                     <>
                       <tr>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Sr. No.
                         </th>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Area
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Drawing No
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           RevNo
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           SheetNo
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           SpoolNo
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Line Size
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           BaseMaterial
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Length
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           InchMeter
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           SurfaceArea
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           PaintSystem
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Remarks
@@ -4130,7 +4130,7 @@ export default function MeasurementSheet() {
                           <th
                             key={group.itemId}
                             colSpan={group.count}
-                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                            className="p-0 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
                           >
                             <Input
                               value={
@@ -4156,7 +4156,7 @@ export default function MeasurementSheet() {
                           </th>
                         ))}
                         <th
-                          className="p-3 text-right"
+                          className="p-0 text-right"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Actions
@@ -4167,7 +4167,7 @@ export default function MeasurementSheet() {
                           {breakupColumns.map((column) => (
                             <th
                               key={`${column.itemId}-${column.name}`}
-                              className="p-3 text-center"
+                              className="p-0 text-center"
                             >
                               <div className="flex flex-col items-center justify-center">
                                 <span className="font-bold text-xs">
@@ -4314,50 +4314,50 @@ export default function MeasurementSheet() {
                     <>
                       <tr>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Sr.
                         </th>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Item Description
                         </th>
                         <th
-                          className="p-3 text-left"
+                          className="p-0 text-left"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Area
                         </th>
 
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           {measurementLabels[0]}
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           {measurementLabels[1]}
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           {measurementLabels[2]}
                         </th>
                         <th
-                          className="p-3 text-center"
+                          className="p-0 text-center"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Qty
                         </th>
                         <th
-                          className="p-3 text-right"
+                          className="p-0 text-right"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Total ({item?.unitOfMeasurement || "MT"})
@@ -4366,7 +4366,7 @@ export default function MeasurementSheet() {
                           <th
                             key={group.itemId}
                             colSpan={group.count}
-                            className="p-3 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
+                            className="p-0 text-center border-b font-bold text-muted-foreground bg-muted/30 py-2"
                           >
                             <Input
                               value={
@@ -4394,7 +4394,7 @@ export default function MeasurementSheet() {
                         {customColumns.map((column) => (
                           <th
                             key={column.id}
-                            className="p-3 text-center"
+                            className="p-0 text-center"
                             rowSpan={hasBreakups ? 2 : 1}
                           >
                             <div className="flex items-center justify-center gap-1">
@@ -4411,7 +4411,7 @@ export default function MeasurementSheet() {
                           </th>
                         ))}
                         <th
-                          className="p-3 text-right"
+                          className="p-0 text-right"
                           rowSpan={hasBreakups ? 2 : 1}
                         >
                           Actions
@@ -4422,7 +4422,7 @@ export default function MeasurementSheet() {
                           {breakupColumns.map((column) => (
                             <th
                               key={`${column.itemId}-${column.name}`}
-                              className="p-3 text-center"
+                              className="p-0 text-center"
                             >
                               <div className="flex flex-col items-center justify-center">
                                 <span className="font-bold text-xs">
@@ -6003,7 +6003,7 @@ export default function MeasurementSheet() {
                               disabled={isRowLocked}
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               value={row.customFields?.["inchMeter"] || ""}
                               className="h-8 w-16 bg-muted"
@@ -6011,7 +6011,7 @@ export default function MeasurementSheet() {
                               title="Auto-calculated: Length × Line Size"
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               value={row.customFields?.["surfaceArea"] || ""}
                               onChange={(e) =>
@@ -6025,7 +6025,7 @@ export default function MeasurementSheet() {
                               disabled={isRowLocked}
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               value={row.customFields?.["paintSystem"] || ""}
                               onChange={(e) =>
@@ -6039,7 +6039,7 @@ export default function MeasurementSheet() {
                               disabled={isRowLocked}
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               value={row.customFields?.["remarks"] || ""}
                               onChange={(e) =>
@@ -6081,7 +6081,7 @@ export default function MeasurementSheet() {
                             return (
                               <td
                                 key={key}
-                                className="p-3 align-top text-center"
+                                className="p-0 align-top text-center"
                               >
                                 <div className="flex flex-col items-center gap-1">
                                   {isLocked || isRowLocked ? (
@@ -6119,7 +6119,7 @@ export default function MeasurementSheet() {
                               </td>
                             );
                           })}
-                          <td className="p-3 align-top text-right">
+                          <td className="p-0 align-top text-right">
                             <div className="flex items-center justify-end gap-1">
                               <Button
                                 variant="ghost"
@@ -6162,8 +6162,8 @@ export default function MeasurementSheet() {
                         key={row.id}
                         className="border-b last:border-b-0 hover:bg-muted/30"
                       >
-                        <td className="p-3 align-top">{index + 1}</td>
-                        <td className="p-3 align-top space-y-2">
+                        <td className="p-0 align-top">{index + 1}</td>
+                        <td className="p-0 align-top space-y-2">
                           <Input
                             value={row.type}
                             onChange={(e) =>
@@ -6175,7 +6175,7 @@ export default function MeasurementSheet() {
                             disabled={isRowLocked}
                           />
                         </td>
-                        <td className="p-3 align-top">
+                        <td className="p-0 align-top">
                           <Input
                             value={row.area || ""}
                             onChange={(e) =>
@@ -6189,7 +6189,7 @@ export default function MeasurementSheet() {
                           />
                         </td>
 
-                        <td className="p-3 align-top">
+                        <td className="p-0 align-top">
                           <Input
                             type="number"
                             value={row.length ?? ""}
@@ -6203,7 +6203,7 @@ export default function MeasurementSheet() {
                             disabled={isRowLocked}
                           />
                         </td>
-                        <td className="p-3 align-top">
+                        <td className="p-0 align-top">
                           <Input
                             type="number"
                             value={row.width ?? ""}
@@ -6217,7 +6217,7 @@ export default function MeasurementSheet() {
                             disabled={isRowLocked}
                           />
                         </td>
-                        <td className="p-3 align-top">
+                        <td className="p-0 align-top">
                           <Input
                             type="number"
                             value={row.thickness ?? ""}
@@ -6231,7 +6231,7 @@ export default function MeasurementSheet() {
                             disabled={isRowLocked}
                           />
                         </td>
-                        <td className="p-3 align-top">
+                        <td className="p-0 align-top">
                           <Input
                             type="number"
                             value={row.qty ?? ""}
@@ -6245,7 +6245,7 @@ export default function MeasurementSheet() {
                             disabled={isRowLocked}
                           />
                         </td>
-                        <td className="p-3 align-top text-right font-semibold">
+                        <td className="p-0 align-top text-right font-semibold">
                           {row.totalWeight.toFixed(3)}
                         </td>
                         {breakupKeys.map((key) => {
@@ -6254,7 +6254,7 @@ export default function MeasurementSheet() {
                             return (
                               <td
                                 key={key}
-                                className="p-3 align-top text-center bg-muted/20"
+                                className="p-0 align-top text-center bg-muted/20"
                               >
                                 <span className="text-xs text-muted-foreground/30">
                                   -
@@ -6279,7 +6279,7 @@ export default function MeasurementSheet() {
                             milestoneItemDesc,
                           );
                           return (
-                            <td key={key} className="p-3 align-top text-center">
+                            <td key={key} className="p-0 align-top text-center">
                               {isLocked || isRowLocked ? (
                                 <div
                                   className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium mx-auto"
@@ -6314,7 +6314,7 @@ export default function MeasurementSheet() {
                           );
                         })}
                         {customColumns.map((column) => (
-                          <td key={column.id} className="p-3 align-top">
+                          <td key={column.id} className="p-0 align-top">
                             <Input
                               value={row.customFields?.[column.id] ?? ""}
                               onChange={(e) =>
@@ -6329,7 +6329,7 @@ export default function MeasurementSheet() {
                             />
                           </td>
                         ))}
-                        <td className="p-3 align-top text-right">
+                        <td className="p-0 align-top text-right">
                           <div className="flex items-center justify-end gap-1">
                             <Button
                               variant="ghost"
@@ -6373,10 +6373,10 @@ export default function MeasurementSheet() {
                       if (item?.department === "Piping-LHS") {
                         return (
                           <tr key={row.tempId} className="border-b bg-muted/40">
-                            <td className="p-3 align-top text-muted-foreground">
+                            <td className="p-0 align-top text-muted-foreground">
                               {filteredRows.length + index + 1}
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.area || ""}
                                 onChange={(e) =>
@@ -6388,7 +6388,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["docNo"] || ""}
                                 onChange={(e) =>
@@ -6401,7 +6401,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["lineNo"] || ""}
                                 onChange={(e) =>
@@ -6414,7 +6414,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["sheetNo"] ?? ""}
                                 onChange={(e) =>
@@ -6427,7 +6427,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["rev"] ?? ""}
                                 onChange={(e) =>
@@ -6440,7 +6440,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 onChange={(e) =>
                                   handleUpdateTempCustomField(
@@ -6452,7 +6452,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["fjSj"] || ""}
                                 onChange={(e) =>
@@ -6465,7 +6465,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["jointNo"] || ""}
                                 onChange={(e) =>
@@ -6478,7 +6478,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["spoolNo"] || ""}
                                 onChange={(e) =>
@@ -6491,7 +6491,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.width || ""}
@@ -6504,7 +6504,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.thickness || ""}
@@ -6517,7 +6517,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["schedule"] || ""}
                                 onChange={(e) =>
@@ -6530,7 +6530,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["jointType"] || ""}
                                 onChange={(e) =>
@@ -6543,7 +6543,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.type || ""}
                                 onChange={(e) =>
@@ -6554,7 +6554,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={
                                   row.customFields?.["componentPart2"] || ""
@@ -6569,7 +6569,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top text-right font-semibold">
+                            <td className="p-0 align-top text-right font-semibold">
                               -
                             </td>
                           </tr>
@@ -6578,10 +6578,10 @@ export default function MeasurementSheet() {
                       if (item?.department === "Equipment Insulation") {
                         return (
                           <tr key={row.tempId} className="border-b bg-muted/40">
-                            <td className="p-3 align-top text-muted-foreground">
+                            <td className="p-0 align-top text-muted-foreground">
                               {filteredRows.length + index + 1}
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["equipmentNo"] || ""}
                                 onChange={(e) =>
@@ -6594,7 +6594,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={
                                   row.customFields?.["equipmentName"] || ""
@@ -6609,7 +6609,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(
                                   row.customFields?.["portion"] || "",
@@ -6634,7 +6634,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(
                                   row.customFields?.["position"] || "",
@@ -6659,7 +6659,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.customFields?.["temp"] || ""}
@@ -6674,7 +6674,7 @@ export default function MeasurementSheet() {
                                 step="0.1"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(row.customFields?.["moc"] || "")}
                                 onValueChange={(value) =>
@@ -6697,7 +6697,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(
                                   row.customFields?.["insulationType"] || "",
@@ -6724,7 +6724,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.customFields?.["thickness"] ?? ""}
@@ -6739,7 +6739,7 @@ export default function MeasurementSheet() {
                                 step="0.1"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.customFields?.["insulatedDia"] ?? ""}
@@ -6754,7 +6754,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.length ?? ""}
@@ -6767,10 +6767,10 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top text-right font-semibold text-muted-foreground">
+                            <td className="p-0 align-top text-right font-semibold text-muted-foreground">
                               {row.customFields?.["shellArea"] || "-"}
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.customFields?.["dishFactor"] ?? ""}
@@ -6785,7 +6785,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.customFields?.["dishEndNos"] ?? ""}
@@ -6800,10 +6800,10 @@ export default function MeasurementSheet() {
                                 step="1"
                               />
                             </td>
-                            <td className="p-3 align-top text-right font-semibold text-muted-foreground">
+                            <td className="p-0 align-top text-right font-semibold text-muted-foreground">
                               {row.customFields?.["dishArea"] || "-"}
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.customFields?.["otherArea"] ?? ""}
@@ -6818,13 +6818,13 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top text-right font-semibold text-muted-foreground">
+                            <td className="p-0 align-top text-right font-semibold text-muted-foreground">
                               {row.customFields?.["totalArea"] || "-"}
                             </td>
                             {breakupKeys.map((key) => (
-                              <td key={key} className="p-3 align-top"></td>
+                              <td key={key} className="p-0 align-top"></td>
                             ))}
-                            <td className="p-3 align-top text-right">
+                            <td className="p-0 align-top text-right">
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -6839,10 +6839,10 @@ export default function MeasurementSheet() {
                       } else if (item?.department === "Piping Insulation") {
                         return (
                           <tr key={row.tempId} className="border-b bg-muted/40">
-                            <td className="p-3 align-top text-muted-foreground">
+                            <td className="p-0 align-top text-muted-foreground">
                               {filteredRows.length + index + 1}
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["location"] || ""}
                                 onChange={(e) =>
@@ -6855,7 +6855,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["drawingNo"] || ""}
                                 onChange={(e) =>
@@ -6868,7 +6868,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["sheetNo"] || ""}
                                 onChange={(e) =>
@@ -6881,7 +6881,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(row.customFields?.["moc"] || "")}
                                 onValueChange={(value) =>
@@ -6904,7 +6904,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(
                                   row.customFields?.["lineSize"] || "",
@@ -6929,7 +6929,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.customFields?.["pipeOD"] || ""}
@@ -6943,7 +6943,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={
@@ -6961,7 +6961,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(
                                   row.customFields?.["insulationType"] || "",
@@ -6986,7 +6986,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["temp"] || ""}
                                 onChange={(e) =>
@@ -6999,7 +6999,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.length || ""}
@@ -7012,7 +7012,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyElbow90"] || ""}
                                 onChange={(e) =>
@@ -7025,7 +7025,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyElbow45"] || ""}
                                 onChange={(e) =>
@@ -7038,7 +7038,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyTee"] || ""}
                                 onChange={(e) =>
@@ -7051,7 +7051,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyReducer"] || ""}
                                 onChange={(e) =>
@@ -7064,7 +7064,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyEndCap"] || ""}
                                 onChange={(e) =>
@@ -7077,7 +7077,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyFlangeRem"] || ""}
                                 onChange={(e) =>
@@ -7090,7 +7090,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyValveRem"] || ""}
                                 onChange={(e) =>
@@ -7103,7 +7103,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyFlangeFix"] || ""}
                                 onChange={(e) =>
@@ -7116,7 +7116,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["qtyValveFix"] || ""}
                                 onChange={(e) =>
@@ -7129,7 +7129,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={
                                   row.customFields?.["qtyWeldValveFix"] || ""
@@ -7144,7 +7144,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-12"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={
                                   row.customFields?.["totalFittingsLength"] !==
@@ -7156,7 +7156,7 @@ export default function MeasurementSheet() {
                                 readOnly
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={
                                   row.customFields?.["rmt"] !== undefined
@@ -7174,7 +7174,7 @@ export default function MeasurementSheet() {
                                 readOnly
                               />
                             </td>
-                            <td className="p-3 align-top text-right font-semibold">
+                            <td className="p-0 align-top text-right font-semibold">
                               <Input
                                 value={
                                   row.customFields?.["area"] !== undefined
@@ -7192,17 +7192,17 @@ export default function MeasurementSheet() {
                                 readOnly
                               />
                             </td>
-                            <td className="p-3 align-top text-right">-</td>
+                            <td className="p-0 align-top text-right">-</td>
                           </tr>
                         );
                       }
                       if (item?.department === "Structure") {
                         return (
                           <tr key={row.tempId} className="border-b bg-muted/40">
-                            <td className="p-3 align-top text-muted-foreground">
+                            <td className="p-0 align-top text-muted-foreground">
                               {filteredRows.length + index + 1}
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.type || ""}
                                 onChange={(e) =>
@@ -7215,7 +7215,7 @@ export default function MeasurementSheet() {
                               />
                             </td>
 
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={
                                   row.customFields?.["structureType"] || ""
@@ -7231,7 +7231,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["mark"] || ""}
                                 onChange={(e) =>
@@ -7246,7 +7246,7 @@ export default function MeasurementSheet() {
                               />
                             </td>
 
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.unit ?? ""}
@@ -7260,7 +7260,7 @@ export default function MeasurementSheet() {
                                 placeholder="Unit Wt"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.length ?? ""}
@@ -7273,7 +7273,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.width ?? ""}
@@ -7286,7 +7286,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.thickness ?? ""}
@@ -7299,7 +7299,7 @@ export default function MeasurementSheet() {
                                 step="0.001"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 type="number"
                                 value={row.qty ?? ""}
@@ -7312,7 +7312,7 @@ export default function MeasurementSheet() {
                                 step="1"
                               />
                             </td>
-                            <td className="p-3 align-top text-right font-semibold">
+                            <td className="p-0 align-top text-right font-semibold">
                               {(
                                 (row.length || 0) *
                                 (row.width || 1) *
@@ -7324,7 +7324,7 @@ export default function MeasurementSheet() {
                             {breakupKeys.map((key) => (
                               <td
                                 key={key}
-                                className="p-3 align-top text-center"
+                                className="p-0 align-top text-center"
                               >
                                 <div className="text-sm font-medium">
                                   {row.customFields?.[`breakupValue_${key}`] ||
@@ -7333,7 +7333,7 @@ export default function MeasurementSheet() {
                               </td>
                             ))}
                             {customColumns.map((column) => (
-                              <td key={column.id} className="p-3 align-top">
+                              <td key={column.id} className="p-0 align-top">
                                 <Input
                                   value={row.customFields?.[column.id] ?? ""}
                                   onChange={(e) =>
@@ -7347,17 +7347,17 @@ export default function MeasurementSheet() {
                                 />
                               </td>
                             ))}
-                            <td className="p-3 align-top text-right">-</td>
+                            <td className="p-0 align-top text-right">-</td>
                           </tr>
                         );
                       }
                       if (item?.department === "Piping-Spool Status") {
                         return (
                           <tr key={row.tempId} className="border-b bg-muted/40">
-                            <td className="p-3 align-top text-muted-foreground">
+                            <td className="p-0 align-top text-muted-foreground">
                               {filteredRows.length + index + 1}
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={
                                   row.area !== undefined && row.area !== null
@@ -7373,7 +7373,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["drawingNo"] || ""}
                                 onChange={(e) =>
@@ -7386,7 +7386,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["revNo"] || ""}
                                 onChange={(e) =>
@@ -7399,7 +7399,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["sheetNo"] || ""}
                                 onChange={(e) =>
@@ -7412,7 +7412,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["spoolNo"] || ""}
                                 onChange={(e) =>
@@ -7425,7 +7425,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(
                                   row.customFields?.["lineSize"] || "",
@@ -7450,7 +7450,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Select
                                 value={String(
                                   row.customFields?.["baseMaterial"] || "",
@@ -7475,7 +7475,7 @@ export default function MeasurementSheet() {
                                 </SelectContent>
                               </Select>
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.length || ""}
                                 onChange={(e) =>
@@ -7497,7 +7497,7 @@ export default function MeasurementSheet() {
                                 placeholder="e.g. 2+2"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["inchMeter"] || ""}
                                 className="h-8 w-16 bg-muted"
@@ -7505,7 +7505,7 @@ export default function MeasurementSheet() {
                                 title="Auto-calculated: Length × Line Size"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["surfaceArea"] || ""}
                                 onChange={(e) =>
@@ -7518,7 +7518,7 @@ export default function MeasurementSheet() {
                                 className="h-8 w-16"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["paintSystem"] || ""}
                                 onChange={(e) =>
@@ -7531,7 +7531,7 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-24"
                               />
                             </td>
-                            <td className="p-3 align-top">
+                            <td className="p-0 align-top">
                               <Input
                                 value={row.customFields?.["remarks"] || ""}
                                 onChange={(e) =>
@@ -7544,16 +7544,16 @@ export default function MeasurementSheet() {
                                 className="border-x-0 border-t-0 border-b border-input rounded-none shadow-none bg-transparent focus-visible:ring-0 h-8 px-1 text-center w-32"
                               />
                             </td>
-                            <td className="p-3 align-top text-right">-</td>
+                            <td className="p-0 align-top text-right">-</td>
                           </tr>
                         );
                       }
                       return (
                         <tr key={row.tempId} className="border-b bg-muted/40">
-                          <td className="p-3 align-top text-muted-foreground">
+                          <td className="p-0 align-top text-muted-foreground">
                             T{index + 1}
                           </td>
-                          <td className="p-3 align-top space-y-2">
+                          <td className="p-0 align-top space-y-2">
                             <Input
                               value={row.type || ""}
                               onChange={(e) =>
@@ -7565,7 +7565,7 @@ export default function MeasurementSheet() {
                               className="h-8"
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               value={row.area || ""}
                               onChange={(e) =>
@@ -7578,7 +7578,7 @@ export default function MeasurementSheet() {
                             />
                           </td>
 
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               type="number"
                               value={row.length || ""}
@@ -7591,7 +7591,7 @@ export default function MeasurementSheet() {
                               step="0.001"
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               type="number"
                               value={row.width || ""}
@@ -7604,7 +7604,7 @@ export default function MeasurementSheet() {
                               step="0.001"
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               type="number"
                               value={row.thickness || ""}
@@ -7617,7 +7617,7 @@ export default function MeasurementSheet() {
                               step="0.001"
                             />
                           </td>
-                          <td className="p-3 align-top">
+                          <td className="p-0 align-top">
                             <Input
                               type="number"
                               value={row.qty || ""}
@@ -7630,7 +7630,7 @@ export default function MeasurementSheet() {
                               min={0}
                             />
                           </td>
-                          <td className="p-3 align-top text-right font-semibold">
+                          <td className="p-0 align-top text-right font-semibold">
                             {(
                               (row.length || 1) *
                               (row.width || 1) *
@@ -7639,7 +7639,7 @@ export default function MeasurementSheet() {
                               (row.unit || 1)
                             ).toFixed(3)}
                           </td>
-                          <td className="p-3 align-top text-muted-foreground">
+                          <td className="p-0 align-top text-muted-foreground">
                             Pending save
                           </td>
                           {breakupKeys.map((key) => {
@@ -7647,7 +7647,7 @@ export default function MeasurementSheet() {
                             return (
                               <td
                                 key={key}
-                                className="p-3 align-top text-center"
+                                className="p-0 align-top text-center"
                               >
                                 <div className="text-sm font-medium">
                                   {row.customFields?.[`breakupValue_${key}`] ||
@@ -7657,7 +7657,7 @@ export default function MeasurementSheet() {
                             );
                           })}
                           {customColumns.map((column) => (
-                            <td key={column.id} className="p-3 align-top">
+                            <td key={column.id} className="p-0 align-top">
                               <Input
                                 value={row.customFields?.[column.id] ?? ""}
                                 onChange={(e) =>
@@ -7671,7 +7671,7 @@ export default function MeasurementSheet() {
                               />
                             </td>
                           ))}
-                          <td className="p-3 align-top text-right">
+                          <td className="p-0 align-top text-right">
                             <Button
                               variant="ghost"
                               size="sm"
@@ -7689,10 +7689,10 @@ export default function MeasurementSheet() {
                     <td colSpan={5} className="p-3">
                       Subtotal - {selectedAreaLabel}
                     </td>
-                    <td colSpan={3} className="p-3 text-center">
+                    <td colSpan={3} className="p-0 text-center">
                       Qty: {subtotalQty.toFixed(2)}
                     </td>
-                    <td className="p-3 text-right">
+                    <td className="p-0 text-right">
                       {subtotalWeight.toFixed(3)}{" "}
                       {item?.unitOfMeasurement || "MT"}
                     </td>
