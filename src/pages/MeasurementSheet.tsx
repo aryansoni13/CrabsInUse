@@ -606,7 +606,7 @@ export default function MeasurementSheet() {
     onConfirm: () => void;
   }>({
     isOpen: false,
-    onConfirm: () => {},
+    onConfirm: () => { },
   });
   const [partialDialog, setPartialDialog] = useState<{
     isOpen: boolean;
@@ -1354,7 +1354,7 @@ export default function MeasurementSheet() {
           setIsAddingRows(false);
           setUnsavedDialog({
             isOpen: false,
-            onConfirm: () => {},
+            onConfirm: () => { },
           });
         },
       });
@@ -1380,7 +1380,7 @@ export default function MeasurementSheet() {
             setIsAddingRows(false);
             setUnsavedDialog({
               isOpen: false,
-              onConfirm: () => {},
+              onConfirm: () => { },
             });
             navigate(`/projects/${projectId}/orders/${orderId}/items`);
           },
@@ -1444,10 +1444,10 @@ export default function MeasurementSheet() {
           item.department === "Piping-LHS"
             ? Number(width) || 0
             : Number(length || 0) *
-              Number(width || 1) *
-              Number(thickness || 1) *
-              Number(qty || 0) *
-              Number(unit || 1);
+            Number(width || 1) *
+            Number(thickness || 1) *
+            Number(qty || 0) *
+            Number(unit || 1);
       }
 
       // Calculate breakup values for all breakup columns
@@ -1508,9 +1508,9 @@ export default function MeasurementSheet() {
       prev.map((row) =>
         row.id === rowId
           ? {
-              ...row,
-              ...computedUpdates,
-            }
+            ...row,
+            ...computedUpdates,
+          }
           : row,
       ),
     );
@@ -1661,7 +1661,7 @@ export default function MeasurementSheet() {
     // Check if fully complete (100% of row quantity)
     const isFullyComplete = Math.abs(completedQty - totalQty) === 0;
     const newStatus = {
-      done: isFullyComplete && Math.abs(completedQty - lockedQty) === 0,
+      done: isFullyComplete && Math.abs(completedQty - lockedQty) === 0 && totalQty > 0,
       // Done only if fully completed AND fully locked
       completedQty,
       completedWeight,
@@ -1754,7 +1754,7 @@ export default function MeasurementSheet() {
     // Check if fully complete (100% of row quantity)
     const isFullyComplete = Math.abs(completedQty - totalQty) < 0.001;
     const newStatus = {
-      done: isFullyComplete && Math.abs(completedQty - lockedQty) < 0.001,
+      done: isFullyComplete && Math.abs(completedQty - lockedQty) < 0.001 && totalQty > 0,
       completedQty: completedQty,
       completedWeight: newCompletedWeight,
       date: new Date().toISOString().split("T")[0],
@@ -1845,9 +1845,9 @@ export default function MeasurementSheet() {
       prevItems.map((i) =>
         i.id === itemId
           ? {
-              ...i,
-              description: newDescription,
-            }
+            ...i,
+            description: newDescription,
+          }
           : i,
       ),
     );
@@ -1857,9 +1857,9 @@ export default function MeasurementSheet() {
       setItem((prev) =>
         prev
           ? {
-              ...prev,
-              description: newDescription,
-            }
+            ...prev,
+            description: newDescription,
+          }
           : prev,
       );
     }
@@ -1894,9 +1894,9 @@ export default function MeasurementSheet() {
       prevItems.map((i) =>
         i.id === itemId
           ? {
-              ...i,
-              shortDescription: newShortDescription,
-            }
+            ...i,
+            shortDescription: newShortDescription,
+          }
           : i,
       ),
     );
@@ -1906,9 +1906,9 @@ export default function MeasurementSheet() {
       setItem((prev) =>
         prev
           ? {
-              ...prev,
-              shortDescription: newShortDescription,
-            }
+            ...prev,
+            shortDescription: newShortDescription,
+          }
           : prev,
       );
     }
@@ -2306,9 +2306,9 @@ export default function MeasurementSheet() {
       prev.map((r) =>
         r.id === rowId
           ? {
-              ...r,
-              ...updates,
-            }
+            ...r,
+            ...updates,
+          }
           : r,
       ),
     );
@@ -2652,35 +2652,35 @@ export default function MeasurementSheet() {
       {!["Structure", "Piping-LHS", "Piping-Spool Status"].includes(
         item?.department || "",
       ) && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Measurement Labels</CardTitle>
-            <CardDescription>
-              Customize the length/breadth/height column names
-            </CardDescription>
-          </CardHeader>
-          <div className="flex flex-col gap-6">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-card p-6 rounded-lg border shadow-sm">
-              {measurementLabels.map((label, index) => (
-                <div key={index} className="space-y-2">
-                  <Label htmlFor={`measure-${index}`}>
-                    Measure {index + 1}
-                  </Label>
-                  <Input
-                    id={`measure-${index}`}
-                    value={label}
-                    onChange={(e) =>
-                      handleMeasurementLabelChange(index, e.target.value)
-                    }
-                    placeholder={`Label for Measure ${index + 1}`}
-                    className="bg-background"
-                  />
-                </div>
-              ))}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Measurement Labels</CardTitle>
+              <CardDescription>
+                Customize the length/breadth/height column names
+              </CardDescription>
+            </CardHeader>
+            <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-card p-6 rounded-lg border shadow-sm">
+                {measurementLabels.map((label, index) => (
+                  <div key={index} className="space-y-2">
+                    <Label htmlFor={`measure-${index}`}>
+                      Measure {index + 1}
+                    </Label>
+                    <Input
+                      id={`measure-${index}`}
+                      value={label}
+                      onChange={(e) =>
+                        handleMeasurementLabelChange(index, e.target.value)
+                      }
+                      placeholder={`Label for Measure ${index + 1}`}
+                      className="bg-background"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </Card>
-      )}
+          </Card>
+        )}
 
       <Card>
         <CardHeader>
@@ -4774,7 +4774,7 @@ export default function MeasurementSheet() {
                                 className="p-0 align-top text-center"
                               >
                                 <div className="flex flex-col items-center gap-1">
-                                  {isLocked || isRowLocked ? (
+                                  {isLocked || (status?.lockedQty || 0) > 0 ? (
                                     <div
                                       className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
@@ -5016,8 +5016,8 @@ export default function MeasurementSheet() {
                           <td className="p-0 align-top text-right font-bold text-primary">
                             {row.customFields?.["shellArea"] !== undefined
                               ? parseFloat(
-                                  String(row.customFields["shellArea"]),
-                                ).toFixed(3)
+                                String(row.customFields["shellArea"]),
+                              ).toFixed(3)
                               : "0.000"}
                           </td>
                           <td className="p-0 align-top">
@@ -5055,8 +5055,8 @@ export default function MeasurementSheet() {
                           <td className="p-0 align-top text-right font-bold text-primary">
                             {row.customFields?.["dishArea"] !== undefined
                               ? parseFloat(
-                                  String(row.customFields["dishArea"]),
-                                ).toFixed(3)
+                                String(row.customFields["dishArea"]),
+                              ).toFixed(3)
                               : "0.000"}
                           </td>
                           <td className="p-0 align-top">
@@ -5078,8 +5078,8 @@ export default function MeasurementSheet() {
                           <td className="p-0 align-top text-right font-black text-primary">
                             {row.customFields?.["totalArea"] !== undefined
                               ? parseFloat(
-                                  String(row.customFields["totalArea"]),
-                                ).toFixed(3)
+                                String(row.customFields["totalArea"]),
+                              ).toFixed(3)
                               : (row.totalWeight || 0).toFixed(3)}
                           </td>
                           {breakupKeys.map((key) => {
@@ -5104,7 +5104,7 @@ export default function MeasurementSheet() {
                                 className="p-0 align-top text-center"
                               >
                                 <div className="flex flex-col items-center gap-1">
-                                  {isLocked || isRowLocked ? (
+                                  {isLocked || (status?.lockedQty || 0) > 0 ? (
                                     <div
                                       className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
@@ -5486,7 +5486,7 @@ export default function MeasurementSheet() {
                             <Input
                               value={
                                 row.customFields?.["totalFittingsLength"] !==
-                                undefined
+                                  undefined
                                   ? row.customFields["totalFittingsLength"]
                                   : ""
                               }
@@ -5532,7 +5532,7 @@ export default function MeasurementSheet() {
                                 className="p-0 align-top text-center"
                               >
                                 <div className="flex flex-col items-center gap-1">
-                                  {isLocked || isRowLocked ? (
+                                  {isLocked || (status?.lockedQty || 0) > 0 ? (
                                     <div
                                       className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
@@ -5758,7 +5758,7 @@ export default function MeasurementSheet() {
                                 className="p-0 align-top text-center"
                               >
                                 <div className="flex flex-col items-center gap-1">
-                                  {isLocked || isRowLocked ? (
+                                  {isLocked || (status?.lockedQty || 0) > 0 ? (
                                     <div
                                       className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
@@ -6062,10 +6062,10 @@ export default function MeasurementSheet() {
                             const totalQty =
                               item?.department === "Piping-Spool Status"
                                 ? parseFloat(
-                                    String(
-                                      row.customFields?.["inchMeter"] || "0",
-                                    ),
-                                  )
+                                  String(
+                                    row.customFields?.["inchMeter"] || "0",
+                                  ),
+                                )
                                 : row.qty;
                             const isPart =
                               completedQty > 0 && completedQty < totalQty;
@@ -6084,7 +6084,7 @@ export default function MeasurementSheet() {
                                 className="p-0 align-top text-center"
                               >
                                 <div className="flex flex-col items-center gap-1">
-                                  {isLocked || isRowLocked ? (
+                                  {isLocked || (status?.lockedQty || 0) > 0 ? (
                                     <div
                                       className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium"
                                       title="Locked"
@@ -6280,7 +6280,7 @@ export default function MeasurementSheet() {
                           );
                           return (
                             <td key={key} className="p-0 align-top text-center">
-                              {isLocked || isRowLocked ? (
+                              {isLocked || (status?.lockedQty || 0) > 0 ? (
                                 <div
                                   className="flex items-center justify-center h-8 w-16 bg-muted rounded-md text-muted-foreground text-xs font-medium mx-auto"
                                   title="Locked"
@@ -7148,7 +7148,7 @@ export default function MeasurementSheet() {
                               <Input
                                 value={
                                   row.customFields?.["totalFittingsLength"] !==
-                                  undefined
+                                    undefined
                                     ? row.customFields["totalFittingsLength"]
                                     : ""
                                 }
@@ -7755,9 +7755,9 @@ export default function MeasurementSheet() {
                 <p className="text-2xl font-bold">
                   {grandTotalWeight > 0
                     ? Math.round(
-                        (calculateTotalMilestoneProgress() / grandTotalWeight) *
-                          100,
-                      )
+                      (calculateTotalMilestoneProgress() / grandTotalWeight) *
+                      100,
+                    )
                     : 0}
                   %
                 </p>

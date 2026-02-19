@@ -372,6 +372,7 @@ export default function Items() {
             lockedQty: newLockedQty,
             lockedWeight: newLockedWeight,
             itemId: milestone.itemId,
+            inputValue: currentStatus.inputValue,
           };
         }
 
@@ -898,7 +899,7 @@ export default function Items() {
                           // Auto-populate short description if it's empty or matches previous description
                           shortDescription:
                             !prev.shortDescription ||
-                            prev.shortDescription === prev.description
+                              prev.shortDescription === prev.description
                               ? value
                               : prev.shortDescription,
                         }));
@@ -1098,7 +1099,7 @@ export default function Items() {
                           // Auto-populate short description if it's empty or matches previous description
                           shortDescription:
                             !prev.shortDescription ||
-                            prev.shortDescription === prev.description
+                              prev.shortDescription === prev.description
                               ? value
                               : prev.shortDescription,
                         }));
@@ -1554,11 +1555,11 @@ export default function Items() {
                   <p className="text-2xl font-bold">
                     {filteredItems.length > 0
                       ? formatCurrency(
-                          filteredItems.reduce(
-                            (sum, item) => sum + item.amount,
-                            0,
-                          ) / filteredItems.length,
-                        )
+                        filteredItems.reduce(
+                          (sum, item) => sum + item.amount,
+                          0,
+                        ) / filteredItems.length,
+                      )
                       : "₹0"}
                   </p>
                   <p className="text-xs text-muted-foreground">
