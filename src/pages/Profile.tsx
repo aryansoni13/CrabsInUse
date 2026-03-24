@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,8 +20,9 @@ import {
   AlertTriangle,
   Shield,
 } from "lucide-react";
-import { clearUserData } from "@/lib/storage";
+import { clearUserData, userStorage } from "@/lib/storage";
 import { ConfirmationDialog } from "@/components/ui/confirmation-dialog";
+
 
 export default function Profile() {
   const { currentUser } = useAuth();
@@ -38,17 +38,23 @@ export default function Profile() {
 
     setIsLoading(true);
     try {
-      const { error } = await supabase.auth.updateUser({
-        data: {
-          display_name: displayName,
-        },
+      await userStorage.update(currentUser.id, {
+        displayName,
       });
 
-      if (error) throw error;
-
+      // Update local auth user metadata to reflect changes in UI
+      const updatedUser = {
+        ...currentUser,
+        user_metadata: {
+          ...currentUser.user_metadata,
+          display_name: displayName,
+        },
+      };
+      localStorage.setItem("auth_user", JSON.stringify(updatedUser));
+      
       toast({
         title: "Success",
-        description: "Profile updated successfully",
+        description: "Profile updated successfully (Local)",
       });
     } catch (error) {
       toast({
@@ -60,6 +66,7 @@ export default function Profile() {
       setIsLoading(false);
     }
   };
+
 
   const handleDeleteAllData = async () => {
     if (!currentUser) return;

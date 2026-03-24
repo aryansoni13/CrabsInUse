@@ -1,70 +1,48 @@
-import { supabase } from "./supabase";
 import { ColumnGroup } from "@/types";
 
-// Helper to convert snake_case to camelCase
-const toCamelCase = (obj: any): any => {
-  if (obj === null || obj === undefined) return obj;
-  if (Array.isArray(obj)) return obj.map(toCamelCase);
-  if (typeof obj !== "object") return obj;
-
-  const camelObj: any = {};
-  for (const key in obj) {
-    const camelKey = key.replace(/_([a-z])/g, (_, letter) =>
-      letter.toUpperCase(),
-    );
-    camelObj[camelKey] = toCamelCase(obj[key]);
-  }
-  return camelObj;
-};
-
-// Helper to convert camelCase to snake_case
-const toSnakeCase = (obj: any): any => {
-  if (obj === null || obj === undefined) return obj;
-  if (Array.isArray(obj)) return obj.map(toSnakeCase);
-  if (typeof obj !== "object") return obj;
-
-  const snakeObj: any = {};
-  for (const key in obj) {
-    const snakeKey = key.replace(/([A-Z])/g, "_$1").toLowerCase();
-    snakeObj[snakeKey] = toSnakeCase(obj[key]);
-  }
-  return snakeObj;
+// --- Local Storage Helper ---
+const localDb = {
+  get: <T>(key: string): T[] => {
+    const data = localStorage.getItem(`crabs_${key}`);
+    return data ? JSON.parse(data) : [];
+  },
+  save: <T>(key: string, data: T[]): void => {
+    localStorage.setItem(`crabs_${key}`, JSON.stringify(data));
+  },
 };
 
 export const columnGroupStorage = {
   async create(data: Omit<ColumnGroup, "id" | "createdAt" | "updatedAt">) {
-    const { data: result, error } = await supabase
-      .from("column_groups")
-      .insert(toSnakeCase(data))
-      .select()
-      .single();
-
-    if (error) throw error;
-    return toCamelCase(result) as ColumnGroup;
+    const groups = localDb.get<ColumnGroup>("column_groups");
+    const newGroup = {
+      ...data,
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as ColumnGroup;
+    groups.push(newGroup);
+    localDb.save("column_groups", groups);
+    return newGroup;
   },
 
   async update(id: string, data: Partial<ColumnGroup>) {
-    const { data: result, error } = await supabase
-      .from("column_groups")
-      .update({
-        ...toSnakeCase(data),
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return toCamelCase(result) as Partial<ColumnGroup>;
+    const groups = localDb.get<ColumnGroup>("column_groups");
+    const index = groups.findIndex((g) => g.id === id);
+    if (index === -1) return data;
+    const updated = {
+      ...groups[index],
+      ...data,
+      updatedAt: new Date().toISOString(),
+    };
+    groups[index] = updated;
+    localDb.save("column_groups", groups);
+    return updated;
   },
 
   async delete(id: string) {
-    const { error } = await supabase
-      .from("column_groups")
-      .delete()
-      .eq("id", id);
-
-    if (error) throw error;
+    const groups = localDb.get<ColumnGroup>("column_groups");
+    const filtered = groups.filter((g) => g.id !== id);
+    localDb.save("column_groups", filtered);
     return true;
   },
 
@@ -73,14 +51,13 @@ export const columnGroupStorage = {
     department: string,
     userId: string,
   ) {
-    const { data, error } = await supabase
-      .from("column_groups")
-      .select("*")
-      .eq("order_id", orderId)
-      .eq("department", department)
-      .eq("user_id", userId);
-
-    if (error) throw error;
-    return (data || []).map(toCamelCase) as ColumnGroup[];
+    const groups = localDb.get<ColumnGroup>("column_groups");
+    return groups.filter(
+      (g) =>
+        g.orderId === orderId &&
+        g.department === department &&
+        g.userId === userId,
+    );
   },
 };
+

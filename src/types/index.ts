@@ -121,7 +121,9 @@ export interface Department {
   name: string;
   userId: string;
   createdAt: string;
+  updatedAt: string;
 }
+
 
 // Computed values
 export interface ProjectWithCalculations extends Project {

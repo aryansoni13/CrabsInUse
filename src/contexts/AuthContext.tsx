@@ -1,9 +1,22 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
-
 import { userStorage } from "@/lib/storage";
+
+// Mock user constants
+const MOCK_USER_ID = "local-user-id";
+const MOCK_USER: User = {
+  id: MOCK_USER_ID,
+  aud: "authenticated",
+  role: "authenticated",
+  email: "localuser@example.com",
+  user_metadata: {
+    display_name: "Local Admin",
+  },
+  app_metadata: {},
+  created_at: new Date().toISOString(),
+  last_sign_in_at: new Date().toISOString(),
+};
 
 interface AuthContextType {
   currentUser: User | null;
@@ -38,35 +51,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setCurrentUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setCurrentUser(session?.user ?? null);
-      setLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
+    // Simulate getting session from localStorage
+    const savedUser = localStorage.getItem("auth_user");
+    if (savedUser) {
+      setCurrentUser(JSON.parse(savedUser));
+    } else {
+      // For this specific requirement (bypass login/signup), we can auto-login
+      setCurrentUser(MOCK_USER);
+      localStorage.setItem("auth_user", JSON.stringify(MOCK_USER));
+    }
+    setLoading(false);
   }, []);
 
   const login = async (email: string, password: string) => {
+    setLoading(true);
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) throw error;
-      toast.success("Logged in successfully");
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const user = { ...MOCK_USER, email };
+      setCurrentUser(user);
+      localStorage.setItem("auth_user", JSON.stringify(user));
+      toast.success("Logged in successfully (Dev Mode)");
     } catch (error: any) {
       toast.error(error.message || "Failed to login");
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -80,38 +91,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       gstNumber: string;
     },
   ) => {
+    setLoading(true);
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            display_name: fullName,
-          },
-        },
-      });
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const user = { 
+        ...MOCK_USER, 
+        email, 
+        user_metadata: { display_name: fullName } 
+      };
+      
+      setCurrentUser(user);
+      localStorage.setItem("auth_user", JSON.stringify(user));
 
-      if (error) throw error;
-
-      if (data.user && additionalData) {
-        await userStorage.create(data.user.id, {
+      if (additionalData) {
+        await userStorage.create(user.id, {
           email,
           displayName: fullName,
           ...additionalData,
         });
       }
 
-      toast.success("Account created successfully");
+      toast.success("Account created successfully (Dev Mode)");
     } catch (error: any) {
       toast.error(error.message || "Failed to create account");
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   const logout = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      setCurrentUser(null);
+      localStorage.removeItem("auth_user");
       toast.success("Logged out successfully");
     } catch (error: any) {
       toast.error(error.message || "Failed to logout");
@@ -121,9 +135,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const resetPassword = async (email: string) => {
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email);
-      if (error) throw error;
-      toast.success("Password reset email sent");
+      toast.success("Password reset simulated (Dev Mode)");
     } catch (error: any) {
       toast.error(error.message || "Failed to send reset email");
       throw error;
@@ -145,3 +157,4 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
+
